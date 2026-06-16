@@ -5,6 +5,7 @@ cloudflared.exe
 # Temp / scratch files
 _contact.html
 _*.html
+*.log
 
 # OS junk
 Thumbs.db
