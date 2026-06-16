@@ -1,0 +1,11 @@
+# Large binaries — not part of the site
+cloudflared.exe
+*.exe
+
+# Temp / scratch files
+_contact.html
+_*.html
+
+# OS junk
+Thumbs.db
+.DS_Store
