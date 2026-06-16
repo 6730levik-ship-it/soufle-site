@@ -85,14 +85,15 @@
   }
   /* real-photo collage behind the hero content */
   .hero-collage{position:absolute;inset:0;z-index:0;display:grid;
-    grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(3,1fr);gap:6px;
-    filter:blur(2px) saturate(1.08);opacity:.55}
+    grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(3,1fr);gap:5px;
+    filter:blur(1px) saturate(1.12);opacity:.92}
   .hero-collage img{width:100%;height:100%;object-fit:cover}
   .hero-veil{position:absolute;inset:0;z-index:1;pointer-events:none;
     background:
-      radial-gradient(circle at 50% 34%,rgba(255,249,245,.5),rgba(255,249,245,.9) 78%),
-      linear-gradient(160deg,rgba(255,249,245,.8),rgba(251,237,228,.78))}
+      radial-gradient(circle at 50% 38%,rgba(255,249,245,.42),rgba(255,249,245,.12) 60%,rgba(255,249,245,.08)),
+      linear-gradient(160deg,rgba(74,56,41,.06),rgba(74,56,41,.14))}
   .hero .wrap{position:relative;z-index:2}
+  .hero h1,.hero .tag,.hero .sub{text-shadow:0 2px 16px rgba(255,249,245,.95),0 1px 3px rgba(255,249,245,.9)}
   @media(max-width:600px){.hero-collage{grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(4,1fr)}}
   .blob{position:absolute;border-radius:50%;filter:blur(8px);opacity:.5;pointer-events:none;z-index:1}
   .b1{width:120px;height:120px;background:var(--coral-soft);top:14%;right:10%;animation:float 7s ease-in-out infinite}
@@ -105,6 +106,8 @@
     animation:floatImg 6s ease-in-out infinite;
   }
   @keyframes floatImg{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+  .hero-logo{display:block;width:min(300px,74%);height:auto;margin:2px auto 2px;
+    filter:drop-shadow(0 12px 26px rgba(244,118,107,.3));animation:floatImg 6s ease-in-out infinite}
   .badge{display:inline-block;background:#fff;color:var(--coral);font-weight:800;padding:8px 20px;border-radius:50px;font-size:.95rem;box-shadow:var(--shadow-sm);margin-bottom:22px}
   .hero h1{font-size:4.1rem;color:var(--brown);margin:6px 0 4px;letter-spacing:-1px}
   .hero h1 .accent{color:var(--coral)}
@@ -296,7 +299,9 @@
   <span class="blob b1"></span><span class="blob b2"></span>
   <div class="wrap">
     <div style="margin-top:8px"><span class="badge">🍨 גלידת בוטיק · חומרי גלם איכותיים</span></div>
-    <h1>סופלה</h1>
+    <img class="hero-logo" src="img/logo.png" alt="סופלה — Sweet treat"
+         onerror="this.remove();var w=document.getElementById('heroWordmark');if(w)w.style.display='block'">
+    <h1 id="heroWordmark" style="display:none">סופלה</h1>
     <p class="tag">מגיע לך להתפנק</p>
     <p class="sub">טעמים מטורפים, קינוחים מפנקים והרבה אהבה בכל כדור. הזמינו עכשיו לאיסוף עצמי או למשלוח עד הבית.</p>
     <div class="cta-row">
