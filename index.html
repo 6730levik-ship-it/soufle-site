@@ -312,6 +312,29 @@
     font-family:inherit;font-size:1rem;color:var(--brown);background:#fff;transition:border-color .2s}
   .cart-input::placeholder{color:var(--brown-soft);opacity:.8}
   .cart-input:focus{outline:none;border-color:var(--coral)}
+  /* ===== Bit payment modal ===== */
+  .pay-modal{position:fixed;z-index:120;top:50%;left:50%;transform:translate(-50%,-46%) scale(.96);
+    opacity:0;visibility:hidden;transition:.28s var(--ease);width:420px;max-width:93vw;max-height:90vh;
+    background:var(--cream);border-radius:26px;display:flex;flex-direction:column;box-shadow:var(--shadow-lg);overflow:hidden}
+  .pay-modal.open{opacity:1;visibility:visible;transform:translate(-50%,-50%) scale(1)}
+  .pay-head{padding:18px 22px;background:#0093d0;color:#fff;display:flex;justify-content:space-between;align-items:center}
+  .pay-head h3{font-size:1.35rem}
+  .pay-body{padding:22px;overflow-y:auto;text-align:center}
+  .pay-lead{color:var(--brown-soft);font-weight:600;margin:4px 0}
+  .pay-amount{font-family:'Fredoka';font-size:2.8rem;font-weight:700;color:var(--coral);margin:2px 0 12px}
+  .pay-phone{display:inline-flex;align-items:center;gap:10px;background:#fff;border:2px dashed #0093d0;color:#0093d0;
+    font-family:'Fredoka';font-size:1.5rem;font-weight:700;padding:12px 22px;border-radius:16px;cursor:pointer;
+    direction:ltr;transition:.15s;font-family:inherit}
+  .pay-phone:hover{background:#eaf7fd}
+  .pay-phone .copyhint{font-size:.8rem;font-weight:700;color:var(--brown-soft)}
+  .pay-steps{text-align:right;margin:20px 4px 6px;padding-right:20px;color:var(--brown);line-height:1.9;font-size:1rem}
+  .pay-steps b{color:var(--coral)}
+  .btn-open-bit{margin-top:16px;width:100%;background:#0093d0;color:#fff;border:none;border-radius:50px;
+    padding:14px;font-weight:800;font-size:1.05rem;font-family:inherit;cursor:pointer;transition:.15s}
+  .btn-open-bit:hover{background:#007bb0;transform:translateY(-1px)}
+  .pay-foot{padding:18px 22px;border-top:1px solid var(--cream-3);background:#fff;display:flex;flex-direction:column;gap:10px}
+  .pay-later{background:none;border:none;color:var(--brown-soft);font-family:inherit;font-weight:700;cursor:pointer;font-size:.95rem;padding:4px}
+  .pay-later:hover{color:var(--brown)}
   /* ===== Micro-interactions (Claude) ===== */
   @media (prefers-reduced-motion: reduce){
     *{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
@@ -522,9 +545,35 @@
     <input id="custPhone" class="cart-input" type="tel" inputmode="tel" placeholder="טלפון *" />
     <input id="custNotes" class="cart-input" type="text" placeholder="כתובת למשלוח (חובה במשלוח) / הערות" />
     <div class="total-row"><span>סה״כ</span><span class="t-val" id="cartTotal">₪0</span></div>
-    <button class="checkout-btn" id="checkoutBtn" onclick="checkout()" disabled>
-      💬 שליחת הזמנה בוואטסאפ
+    <button class="checkout-btn" id="checkoutBtn" onclick="checkout()" disabled
+      style="background:var(--coral);box-shadow:0 10px 24px rgba(244,118,107,.35)">
+      💳 המשך לתשלום
     </button>
+  </div>
+</aside>
+
+<!-- PAY (Bit) MODAL -->
+<div class="overlay" id="payOverlay" onclick="closePay()"></div>
+<aside class="pay-modal" id="payModal">
+  <div class="pay-head">
+    <h3>💳 תשלום ב-Bit</h3>
+    <button class="close-x" onclick="closePay()">×</button>
+  </div>
+  <div class="pay-body">
+    <p class="pay-lead">שלחו ב-Bit את הסכום:</p>
+    <div class="pay-amount" id="payAmount">₪0</div>
+    <p class="pay-lead">למספר:</p>
+    <button class="pay-phone" id="payPhone" onclick="copyText('0526612332', this)">052-661-2332 <span class="copyhint">📋 העתקה</span></button>
+    <ol class="pay-steps">
+      <li>פִּתחו את אפליקציית <b>Bit</b></li>
+      <li>שִׁלחו <b id="payAmount2">₪0</b> למספר <b>052-661-2332</b></li>
+      <li>חִזרו לכאן ולחצו "שילמתי — שליחת ההזמנה"</li>
+    </ol>
+    <button class="btn-open-bit" onclick="openBit()">📲 פתיחת אפליקציית Bit</button>
+  </div>
+  <div class="pay-foot">
+    <button class="checkout-btn" id="paySendBtn" onclick="finishWhatsApp()">✓ שילמתי — שליחת ההזמנה בוואטסאפ</button>
+    <button class="pay-later" onclick="finishWhatsApp()">אשלם במקום / בוואטסאפ ›</button>
   </div>
 </aside>
 
@@ -535,6 +584,7 @@
   // מערכת ההזמנות של החנות (כל הזמנה נשמרת ומופיעה במסך החנות shop.html)
   const ORDERS_API = "https://ujpslhbxmrpvtmdujigy.supabase.co/functions/v1/soufle-orders";
   const DELIVERY_FEE = 25; // דמי משלוח בתוך ביתר (₪)
+  const BIT_PHONE = "0526612332"; // מספר ה-Bit לקבלת תשלומים
 
   // ====== רשימות בחירה משותפות (ערוך כאן) ======
   const ICE_FLAVORS = ["וניל","שוקולד","תות","פיסטוק","מוקה","עוגיות שמנת","קרמל","רום צימוקים","אגוזי לוז","לימון","מנגו","שוקוצ'יפס"];
@@ -856,8 +906,44 @@
       `\n\nסוג הזמנה: ${modeTxt}` +
       `\nסה״כ: ₪${total}\n\n` +
       `שם: ${name}\nטלפון: ${phone}` +
-      (orderMode==="delivery" ? `\nכתובת: ${address}` : (address?`\nהערות: ${address}`:""));
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, "_blank");
+      (orderMode==="delivery" ? `\nכתובת: ${address}` : (address?`\nהערות: ${address}`:"")) +
+      `\nתשלום: Bit ל-${BIT_PHONE}`;
+    pendingWaUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+    openPay(total);
+  }
+
+  // ===== מסך תשלום Bit =====
+  let pendingWaUrl = "";
+  function openPay(total){
+    document.getElementById("payAmount").textContent = "₪"+total;
+    document.getElementById("payAmount2").textContent = "₪"+total;
+    closeCart();
+    document.getElementById("payOverlay").classList.add("open");
+    document.getElementById("payModal").classList.add("open");
+  }
+  function closePay(){
+    document.getElementById("payOverlay").classList.remove("open");
+    document.getElementById("payModal").classList.remove("open");
+  }
+  function openBit(){
+    // ניסיון לפתוח את אפליקציית Bit; אם לא מותקנת — לחנות האפליקציות
+    const ua = navigator.userAgent || "";
+    const store = /iPhone|iPad|iPod/i.test(ua)
+      ? "https://apps.apple.com/il/app/bit/id1219091061"
+      : "https://play.google.com/store/apps/details?id=com.bnhp.payments.paymentsapp";
+    let opened = false;
+    try{ window.location.href = "bit://"; opened = true; }catch(e){}
+    setTimeout(()=>{ window.open(store, "_blank"); }, 700);
+  }
+  function copyText(t, el){
+    const plain = t;
+    const done = ()=>{ if(el){ const h=el.querySelector(".copyhint"); if(h){ const old=h.textContent; h.textContent="✓ הועתק"; setTimeout(()=>h.textContent=old,1500);} } };
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(plain).then(done).catch(()=>{}); }
+    else { try{ const ta=document.createElement("textarea"); ta.value=plain; document.body.appendChild(ta); ta.select(); document.execCommand("copy"); ta.remove(); done(); }catch(e){} }
+  }
+  function finishWhatsApp(){
+    if(pendingWaUrl) window.open(pendingWaUrl, "_blank");
+    closePay();
   }
 
   function openCart(){document.getElementById("drawer").classList.add("open");document.getElementById("overlay").classList.add("open");}
