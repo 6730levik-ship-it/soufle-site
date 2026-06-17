@@ -572,8 +572,7 @@
     <button class="btn-open-bit" onclick="openBit()">📲 פתיחת אפליקציית Bit</button>
   </div>
   <div class="pay-foot">
-    <button class="checkout-btn" id="paySendBtn" onclick="finishWhatsApp()">✓ שילמתי — שליחת ההזמנה בוואטסאפ</button>
-    <button class="pay-later" onclick="finishWhatsApp()">אשלם במקום / בוואטסאפ ›</button>
+    <button class="checkout-btn" id="paySendBtn" onclick="finishWhatsApp()">✓ סיימתי לשלם — שליחת ההזמנה</button>
   </div>
 </aside>
 
@@ -888,16 +887,10 @@
       total += DELIVERY_FEE;
     }
     const notes = (orderMode==="delivery" ? ("📍 " + address) : (address || "")).trim();
-    // נשמר במערכת ההזמנות של החנות (מופיע מיד במסך החנות + ניתן להדפסת בון).
-    // fire-and-forget עם keepalive כדי שיסתיים גם כש-WhatsApp נפתח.
-    try{
-      fetch(ORDERS_API, {
-        method:"POST", keepalive:true,
-        headers:{ "content-type":"application/json" },
-        body: JSON.stringify({ items, total, mode:orderMode, customer_name:name + " · " + phone, notes })
-      }).catch(()=>{});
-    }catch(e){}
-    // וגם וואטסאפ (נפתח סינכרונית כדי לא להיחסם)
+    // שומרים את ההזמנה בצד — היא תישלח לבון ולוואטסאפ רק אחרי שהלקוח
+    // מסיים לשלם ב-Bit ולוחץ על כפתור הסיום (לא לפני התשלום).
+    pendingOrder = { items, total, mode:orderMode, customer_name:name + " · " + phone, notes };
+    // בונים מראש את הודעת הוואטסאפ
     const lines = items.map(it=>`• ${it.name} x${it.qty} — ₪${it.price*it.qty}`);
     const modeTxt = orderMode==="pickup" ? "🏃 איסוף עצמי" : "🛵 משלוח";
     const msg =
@@ -913,7 +906,7 @@
   }
 
   // ===== מסך תשלום Bit =====
-  let pendingWaUrl = "";
+  let pendingWaUrl = "", pendingOrder = null;
   function openPay(total){
     document.getElementById("payAmount").textContent = "₪"+total;
     document.getElementById("payAmount2").textContent = "₪"+total;
@@ -942,6 +935,17 @@
     else { try{ const ta=document.createElement("textarea"); ta.value=plain; document.body.appendChild(ta); ta.select(); document.execCommand("copy"); ta.remove(); done(); }catch(e){} }
   }
   function finishWhatsApp(){
+    // עכשיו (אחרי התשלום) שולחים את ההזמנה לבון + וואטסאפ
+    if(pendingOrder){
+      try{
+        fetch(ORDERS_API, {
+          method:"POST", keepalive:true,
+          headers:{ "content-type":"application/json" },
+          body: JSON.stringify(pendingOrder)
+        }).catch(()=>{});
+      }catch(e){}
+      pendingOrder = null;
+    }
     if(pendingWaUrl) window.open(pendingWaUrl, "_blank");
     closePay();
   }
