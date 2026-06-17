@@ -267,6 +267,39 @@
   .order-mode{display:flex;gap:8px;margin-bottom:16px}
   .order-mode button{flex:1;padding:11px;border-radius:50px;border:2px solid var(--cream-3);background:#fff;cursor:pointer;font-weight:700;font-family:inherit;color:var(--brown-soft);transition:.2s}
   .order-mode button.active{border-color:var(--coral);color:var(--coral);background:var(--cream-2)}
+  /* ===== Micro-interactions (Claude) ===== */
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+  }
+  /* light sheen sweeping across the main buttons */
+  .btn-primary,.cart-btn,.checkout-btn{position:relative;overflow:hidden;isolation:isolate}
+  .btn-primary::before,.cart-btn::before,.checkout-btn::before{
+    content:"";position:absolute;top:0;left:-65%;width:45%;height:100%;z-index:-1;pointer-events:none;
+    background:linear-gradient(100deg,transparent,rgba(255,255,255,.5),transparent);
+    transform:skewX(-18deg);animation:sheen 5s ease-in-out infinite}
+  @keyframes sheen{0%,74%{left:-65%}88%{left:130%}100%{left:130%}}
+  /* satisfying press on every button */
+  .btn:active,.add-btn:active,.cart-btn:active,.checkout-btn:active{transform:scale(.95)}
+  /* card: coral accent bar slides in + price pops on hover */
+  .card{position:relative}
+  .card::after{content:"";position:absolute;top:0;right:0;left:0;height:4px;border-radius:4px 4px 0 0;
+    background:linear-gradient(90deg,var(--coral),var(--coral-soft));
+    transform:scaleX(0);transform-origin:right;transition:transform .4s var(--ease)}
+  .card:hover::after{transform:scaleX(1)}
+  .price{display:inline-block;transition:transform .25s var(--ease);transform-origin:right}
+  .card:hover .price{transform:scale(1.1)}
+  /* add / size buttons nudge */
+  .add-btn{transition:background .25s,transform .15s var(--ease),box-shadow .25s}
+  .add-btn:hover{box-shadow:0 8px 20px rgba(244,118,107,.4)}
+  /* nav links lift slightly on hover */
+  .nav-links a{transition:color .25s,transform .2s var(--ease)}
+  .nav-links a:hover{transform:translateY(-2px)}
+  /* gentle pulse on the hero badge to draw the eye */
+  .badge{animation:badgePulse 3.2s ease-in-out infinite}
+  @keyframes badgePulse{0%,100%{box-shadow:var(--shadow-sm)}50%{box-shadow:0 10px 26px rgba(244,118,107,.4)}}
+  /* logo reacts to hover */
+  .hero-logo{transition:filter .3s,transform .3s var(--ease)}
+  .hero-logo:hover{filter:drop-shadow(0 14px 30px rgba(244,118,107,.4));transform:scale(1.03) rotate(-2deg);animation-play-state:paused}
 </style>
 </head>
 <body>
@@ -372,17 +405,19 @@
 
       <div class="info-card reveal" data-d="1">
         <h3>📍 מיקום</h3>
-        <p>רחוב [הכתובת שלכם], [עיר]</p>
+        <p>רחוב אלעזר המודעי 7</p>
+        <p>ביתר עילית</p>
         <p style="margin-top:14px">
-          <a href="https://maps.google.com/?q=סופלה גלידה" target="_blank" class="btn btn-ghost" style="padding:10px 20px;font-size:.95rem">פתחו במפות 🗺️</a>
+          <a href="https://maps.google.com/?q=אלעזר המודעי 7 ביתר עילית" target="_blank" class="btn btn-ghost" style="padding:10px 20px;font-size:.95rem">פתחו במפות 🗺️</a>
         </p>
       </div>
 
       <div class="info-card reveal" data-d="2">
         <h3>🕐 שעות פתיחה</h3>
-        <div class="hours-row"><span>א׳ – ה׳</span><span>10:00 – 23:00</span></div>
-        <div class="hours-row"><span>יום ו׳</span><span>09:00 – 15:00</span></div>
-        <div class="hours-row"><span>שבת</span><span>צאת שבת – 24:00</span></div>
+        <div class="hours-row"><span>א׳ – ה׳</span><span>11:00 – 23:00</span></div>
+        <div class="hours-row"><span>יום ו׳</span><span>סגור</span></div>
+        <div class="hours-row"><span>מוצ״ש</span><span>כשעה וחצי אחרי צאת שבת</span></div>
+        <p style="margin-top:12px;font-size:.9rem;color:var(--brown-soft)">⛄ במוצ״ש: עד 23:00 בחורף · ☀️ עד 24:00 בקיץ</p>
       </div>
 
       <div class="info-card reveal" data-d="3">
