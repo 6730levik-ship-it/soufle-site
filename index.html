@@ -518,8 +518,9 @@
       <button id="mode-pickup" class="active" onclick="setMode('pickup')">🏃 איסוף עצמי</button>
       <button id="mode-delivery" onclick="setMode('delivery')">🛵 משלוח</button>
     </div>
-    <input id="custName" class="cart-input" type="text" placeholder="השם שלך (יופיע על הבון) *" />
-    <input id="custNotes" class="cart-input" type="text" placeholder="כתובת למשלוח / הערות (אופציונלי)" />
+    <input id="custName" class="cart-input" type="text" placeholder="השם שלך *" />
+    <input id="custPhone" class="cart-input" type="tel" inputmode="tel" placeholder="טלפון *" />
+    <input id="custNotes" class="cart-input" type="text" placeholder="כתובת למשלוח (חובה במשלוח) / הערות" />
     <div class="total-row"><span>סה״כ</span><span class="t-val" id="cartTotal">₪0</span></div>
     <button class="checkout-btn" id="checkoutBtn" onclick="checkout()" disabled>
       💬 שליחת הזמנה בוואטסאפ
@@ -533,6 +534,7 @@
   const SHOP_NAME = "סופלה";
   // מערכת ההזמנות של החנות (כל הזמנה נשמרת ומופיעה במסך החנות shop.html)
   const ORDERS_API = "https://ujpslhbxmrpvtmdujigy.supabase.co/functions/v1/soufle-orders";
+  const DELIVERY_FEE = 25; // דמי משלוח בתוך ביתר (₪)
 
   // ====== רשימות בחירה משותפות (ערוך כאן) ======
   const ICE_FLAVORS = ["וניל","שוקולד","תות","פיסטוק","מוקה","עוגיות שמנת","קרמל","רום צימוקים","אגוזי לוז","לימון","מנגו","שוקוצ'יפס"];
@@ -776,7 +778,7 @@
     if(ids.length===0){
       body.innerHTML = '<p class="cart-empty"><span class="big">🍦</span>העגלה ריקה<br>בואו נתחיל להתפנק!</p>';
     } else {
-      body.innerHTML = ids.map(key=>{
+      let html = ids.map(key=>{
         const c = cart[key];
         total += c.price*c.qty;
         return `<div class="cart-item">
@@ -791,7 +793,13 @@
           </div>
         </div>`;
       }).join("");
+      if(orderMode==="delivery"){
+        html += `<div class="cart-item" style="display:flex;justify-content:space-between;align-items:center">
+          <h4>🛵 משלוח (בתוך ביתר)</h4><span class="ci-price">₪${DELIVERY_FEE}</span></div>`;
+      }
+      body.innerHTML = html;
     }
+    if(ids.length && orderMode==="delivery") total += DELIVERY_FEE;
     const count = ids.reduce((s,key)=>s+cart[key].qty,0);
     document.getElementById("cartTotal").textContent = "₪"+total;
     document.getElementById("cartCount").textContent = count;
@@ -802,32 +810,41 @@
     orderMode = m;
     document.getElementById("mode-pickup").classList.toggle("active", m==="pickup");
     document.getElementById("mode-delivery").classList.toggle("active", m==="delivery");
+    renderCart(); // לעדכן את הסכום עם/בלי דמי משלוח
   }
 
   function checkout(){
     const ids = Object.keys(cart);
     if(ids.length===0) return;
     const nameEl = document.getElementById("custName");
+    const phoneEl = document.getElementById("custPhone");
+    const addrEl = document.getElementById("custNotes");
     const name = (nameEl && nameEl.value || "").trim();
-    if(!name){
-      if(nameEl){ nameEl.focus(); nameEl.style.borderColor = "var(--coral)"; }
-      alert("רק נוסיף שם להזמנה כדי שנדע למי הבון 🙂");
-      return;
-    }
-    const notes = (document.getElementById("custNotes") && document.getElementById("custNotes").value || "").trim();
+    const phone = (phoneEl && phoneEl.value || "").trim();
+    const address = (addrEl && addrEl.value || "").trim();
+    const flag = el => { if(el){ el.focus(); el.style.borderColor = "var(--coral)"; } };
+    if(!name){ flag(nameEl); alert("רק נוסיף שם להזמנה 🙂"); return; }
+    if(!phone){ flag(phoneEl); alert("צריך טלפון כדי שנוכל לעדכן אותך 📞"); return; }
+    if(orderMode==="delivery" && !address){ flag(addrEl); alert("למשלוח צריך כתובת בתוך ביתר 📍"); return; }
+
     let total=0;
     const items = ids.map(key=>{
       const c=cart[key];
       total += c.price*c.qty;
       return { name:c.name, qty:c.qty, price:c.price };
     });
+    if(orderMode==="delivery"){
+      items.push({ name:"משלוח (בתוך ביתר)", qty:1, price:DELIVERY_FEE });
+      total += DELIVERY_FEE;
+    }
+    const notes = (orderMode==="delivery" ? ("📍 " + address) : (address || "")).trim();
     // נשמר במערכת ההזמנות של החנות (מופיע מיד במסך החנות + ניתן להדפסת בון).
     // fire-and-forget עם keepalive כדי שיסתיים גם כש-WhatsApp נפתח.
     try{
       fetch(ORDERS_API, {
         method:"POST", keepalive:true,
         headers:{ "content-type":"application/json" },
-        body: JSON.stringify({ items, total, mode:orderMode, customer_name:name, notes })
+        body: JSON.stringify({ items, total, mode:orderMode, customer_name:name + " · " + phone, notes })
       }).catch(()=>{});
     }catch(e){}
     // וגם וואטסאפ (נפתח סינכרונית כדי לא להיחסם)
@@ -838,7 +855,8 @@
       lines.join("\n") +
       `\n\nסוג הזמנה: ${modeTxt}` +
       `\nסה״כ: ₪${total}\n\n` +
-      `שם: ${name}\nכתובת/הערות: ${notes}`;
+      `שם: ${name}\nטלפון: ${phone}` +
+      (orderMode==="delivery" ? `\nכתובת: ${address}` : (address?`\nהערות: ${address}`:""));
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, "_blank");
   }
 
