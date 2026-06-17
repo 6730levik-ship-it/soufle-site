@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>סופלה — מסך הזמנות</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800;900&family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --coral:#F4766B;--coral-dark:#e85d50;--brown:#4a3829;--brown-soft:#8a7461;
+    --cream:#FFF9F5;--cream-2:#FBEDE4;--cream-3:#F6E0D2;
+    --green:#3Fb27f;--shadow:0 10px 30px rgba(74,56,41,.12);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Heebo',system-ui,sans-serif;background:var(--cream);color:var(--brown);-webkit-font-smoothing:antialiased}
+  header{position:sticky;top:0;z-index:10;background:var(--coral);color:#fff;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;box-shadow:var(--shadow)}
+  header h1{font-family:'Fredoka';font-size:1.5rem;display:flex;align-items:center;gap:8px}
+  .hstat{display:flex;align-items:center;gap:14px;font-weight:700;font-size:.95rem}
+  .dot{width:11px;height:11px;border-radius:50%;background:#fff;display:inline-block;margin-inline-end:6px}
+  .dot.live{background:#b6f5cf;box-shadow:0 0 0 0 rgba(182,245,207,.8);animation:pulse 1.6s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,255,255,.6)}70%{box-shadow:0 0 0 10px rgba(255,255,255,0)}100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}}
+  .btn{border:none;cursor:pointer;font-family:inherit;font-weight:800;border-radius:50px;padding:9px 16px;font-size:.92rem;transition:.15s}
+  .btn-white{background:#fff;color:var(--coral)}
+  .btn-white:hover{transform:translateY(-1px)}
+  .wrap{max-width:1100px;margin:0 auto;padding:20px}
+  .toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px;color:var(--brown-soft);font-weight:600}
+  .count-pill{background:var(--coral);color:#fff;border-radius:50px;padding:4px 14px;font-weight:800}
+  /* login */
+  .login{max-width:380px;margin:80px auto;background:#fff;border-radius:22px;padding:30px;box-shadow:var(--shadow);text-align:center}
+  .login h2{font-family:'Fredoka';margin-bottom:6px}
+  .login p{color:var(--brown-soft);margin-bottom:18px;font-size:.95rem}
+  .login input{width:100%;padding:13px 16px;border:2px solid var(--cream-3);border-radius:14px;font-family:inherit;font-size:1rem;margin-bottom:14px}
+  .login input:focus{outline:none;border-color:var(--coral)}
+  .login .btn-go{width:100%;background:var(--coral);color:#fff;padding:14px}
+  .err{color:var(--coral-dark);font-weight:700;font-size:.9rem;min-height:20px}
+  /* grid */
+  .orders{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}
+  .order{background:#fff;border-radius:18px;box-shadow:var(--shadow);overflow:hidden;border:2px solid transparent;display:flex;flex-direction:column}
+  .order.fresh{border-color:var(--coral);animation:flash 1s ease 3}
+  @keyframes flash{0%,100%{box-shadow:var(--shadow)}50%{box-shadow:0 0 0 4px rgba(244,118,107,.35),var(--shadow)}}
+  .order.done{opacity:.6}
+  .o-head{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--cream-2)}
+  .o-no{font-family:'Fredoka';font-size:1.25rem;color:var(--coral)}
+  .o-time{font-weight:700;color:var(--brown-soft);font-size:.9rem}
+  .o-mode{display:inline-block;border-radius:50px;padding:3px 12px;font-weight:800;font-size:.82rem;margin:10px 16px 0}
+  .o-mode.pickup{background:#e8f6ee;color:#2c9e6b}
+  .o-mode.delivery{background:#fdeee9;color:var(--coral-dark)}
+  .o-body{padding:6px 16px 12px;flex:1}
+  .o-name{font-weight:800;font-size:1.05rem;margin:10px 0 4px}
+  .o-items{list-style:none;margin:8px 0}
+  .o-items li{padding:7px 0;border-bottom:1px dashed var(--cream-3);font-size:.96rem;display:flex;justify-content:space-between;gap:8px}
+  .o-items li .q{color:var(--coral);font-weight:800;white-space:nowrap}
+  .o-notes{background:var(--cream);border-radius:10px;padding:8px 11px;font-size:.9rem;color:var(--brown-soft);margin-top:8px}
+  .o-total{display:flex;justify-content:space-between;font-family:'Fredoka';font-size:1.2rem;font-weight:700;margin-top:10px}
+  .o-total .v{color:var(--coral)}
+  .o-foot{display:flex;gap:8px;padding:12px 16px;background:#fff;border-top:1px solid var(--cream-2)}
+  .o-foot .btn{flex:1}
+  .btn-print{background:var(--brown);color:#fff}
+  .btn-done{background:var(--green);color:#fff}
+  .btn-done.is-done{background:var(--cream-3);color:var(--brown-soft)}
+  .empty{text-align:center;color:var(--brown-soft);padding:70px 20px;font-size:1.1rem}
+  .empty .big{font-size:3rem;display:block;margin-bottom:10px}
+  /* print bon */
+  #printArea{display:none}
+  @media print{
+    body *{visibility:hidden}
+    #printArea,#printArea *{visibility:visible}
+    #printArea{display:block;position:absolute;top:0;right:0;left:0;width:100%;padding:0;color:#000}
+    @page{margin:6mm}
+  }
+  .bon{font-family:'Heebo',sans-serif;max-width:300px;margin:0 auto;color:#000}
+  .bon h2{font-family:'Fredoka';text-align:center;font-size:1.5rem;margin-bottom:2px}
+  .bon .sub{text-align:center;font-size:.8rem;margin-bottom:10px}
+  .bon .rule{border-top:2px dashed #000;margin:8px 0}
+  .bon .row{display:flex;justify-content:space-between;font-size:.95rem;margin:3px 0}
+  .bon .big{font-size:1.15rem;font-weight:800}
+  .bon ul{list-style:none;margin:6px 0}
+  .bon li{padding:5px 0;border-bottom:1px dotted #999;font-size:.95rem}
+  .bon .tot{display:flex;justify-content:space-between;font-size:1.25rem;font-weight:800;margin-top:8px}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginView" class="login" style="display:none">
+  <div style="font-size:2.4rem">🍦</div>
+  <h2>מסך הזמנות סופלה</h2>
+  <p>הזינו את מפתח החנות כדי לראות את ההזמנות</p>
+  <input id="keyInput" type="password" placeholder="מפתח החנות" />
+  <div class="err" id="loginErr"></div>
+  <button class="btn btn-go" onclick="doLogin()">כניסה</button>
+</div>
+
+<!-- APP -->
+<div id="appView" style="display:none">
+  <header>
+    <h1>🍦 הזמנות סופלה</h1>
+    <div class="hstat">
+      <span><span class="dot live" id="liveDot"></span><span id="liveText">מחובר</span></span>
+      <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:.9rem">
+        <input type="checkbox" id="soundChk" checked> 🔔 צליל
+      </label>
+      <button class="btn btn-white" onclick="logout()">יציאה</button>
+    </div>
+  </header>
+  <div class="wrap">
+    <div class="toolbar">
+      <span class="count-pill" id="newCount">0 חדשות</span>
+      <span id="updatedAt">—</span>
+      <button class="btn btn-white" style="background:var(--cream-2)" onclick="poll(true)">רענון ↻</button>
+    </div>
+    <div class="orders" id="ordersGrid"></div>
+    <div class="empty" id="emptyMsg" style="display:none"><span class="big">📭</span>אין הזמנות עדיין</div>
+  </div>
+</div>
+
+<div id="printArea"></div>
+
+<script>
+  const ORDERS_API = "https://ujpslhbxmrpvtmdujigy.supabase.co/functions/v1/soufle-orders";
+  let KEY = localStorage.getItem("sfl_shop_key") || "";
+  let seen = new Set();
+  let firstLoad = true;
+  let ordersCache = [];
+
+  function show(view){
+    document.getElementById("loginView").style.display = view==="login" ? "block" : "none";
+    document.getElementById("appView").style.display = view==="app" ? "block" : "none";
+  }
+  function doLogin(){
+    const k = document.getElementById("keyInput").value.trim();
+    if(!k) return;
+    KEY = k;
+    document.getElementById("loginErr").textContent = "בודק...";
+    poll(true);
+  }
+  function logout(){ localStorage.removeItem("sfl_shop_key"); KEY=""; seen=new Set(); firstLoad=true; show("login"); }
+
+  function timeStr(iso){
+    const d = new Date(iso);
+    return d.toLocaleTimeString("he-IL",{hour:"2-digit",minute:"2-digit"});
+  }
+  function beep(){
+    if(!document.getElementById("soundChk").checked) return;
+    try{
+      const ac = new (window.AudioContext||window.webkitAudioContext)();
+      const o = ac.createOscillator(), g = ac.createGain();
+      o.connect(g); g.connect(ac.destination);
+      o.type="sine"; o.frequency.value=880; g.gain.value=.12;
+      o.start();
+      o.frequency.setValueAtTime(880, ac.currentTime);
+      o.frequency.setValueAtTime(1320, ac.currentTime+.12);
+      o.stop(ac.currentTime+.26);
+    }catch(e){}
+  }
+
+  function render(orders){
+    ordersCache = orders;
+    const grid = document.getElementById("ordersGrid");
+    const newOnes = orders.filter(o=>o.status!=="done");
+    document.getElementById("newCount").textContent = newOnes.length + " חדשות";
+    document.getElementById("emptyMsg").style.display = orders.length ? "none" : "block";
+    grid.innerHTML = orders.map(o=>{
+      const items = (o.items||[]).map(it=>
+        `<li><span>${it.name}</span><span class="q">×${it.qty}</span></li>`).join("");
+      const fresh = (!o._fresh) ? "" : "fresh";
+      return `<div class="order ${o.status==='done'?'done':''} ${fresh}">
+        <div class="o-head"><span class="o-no">#${o.order_no}</span><span class="o-time">🕐 ${timeStr(o.created_at)}</span></div>
+        <span class="o-mode ${o.mode}">${o.mode==='delivery'?'🛵 משלוח':'🏃 איסוף עצמי'}</span>
+        <div class="o-body">
+          <div class="o-name">👤 ${o.customer_name||'—'}</div>
+          <ul class="o-items">${items}</ul>
+          ${o.notes?`<div class="o-notes">📝 ${o.notes}</div>`:''}
+          <div class="o-total"><span>סה״כ</span><span class="v">₪${o.total}</span></div>
+        </div>
+        <div class="o-foot">
+          <button class="btn btn-print" onclick="printBon('${o.id}')">🖨️ הדפסת בון</button>
+          <button class="btn btn-done ${o.status==='done'?'is-done':''}" onclick="markDone('${o.id}','${o.status==='done'?'new':'done'}')">${o.status==='done'?'↩︎ החזר':'✓ בוצע'}</button>
+        </div>
+      </div>`;
+    }).join("");
+  }
+
+  function printBon(id){
+    const o = ordersCache.find(x=>x.id===id);
+    if(!o) return;
+    const items = (o.items||[]).map(it=>
+      `<li><div class="row big"><span>${it.name}</span><span>×${it.qty}</span></div></li>`).join("");
+    document.getElementById("printArea").innerHTML = `<div class="bon">
+      <h2>סופלה 🍦</h2>
+      <div class="sub">מגיע לך להתפנק</div>
+      <div class="rule"></div>
+      <div class="row big"><span>הזמנה #${o.order_no}</span><span>${timeStr(o.created_at)}</span></div>
+      <div class="row"><span>שם:</span><span><b>${o.customer_name||'—'}</b></span></div>
+      <div class="row"><span>סוג:</span><span>${o.mode==='delivery'?'משלוח':'איסוף עצמי'}</span></div>
+      <div class="rule"></div>
+      <ul>${items}</ul>
+      ${o.notes?`<div class="row">📝 ${o.notes}</div>`:''}
+      <div class="rule"></div>
+      <div class="tot"><span>סה״כ</span><span>₪${o.total}</span></div>
+      <div class="sub" style="margin-top:12px">תודה והמשך יום מתוק!</div>
+    </div>`;
+    window.print();
+  }
+
+  async function markDone(id, status){
+    try{
+      await fetch(ORDERS_API+"?key="+encodeURIComponent(KEY), {
+        method:"PATCH", headers:{"content-type":"application/json"},
+        body: JSON.stringify({ id, status })
+      });
+      poll(true);
+    }catch(e){ alert("שגיאה בעדכון"); }
+  }
+
+  async function poll(manual){
+    if(!KEY){ show("login"); return; }
+    try{
+      const res = await fetch(ORDERS_API+"?key="+encodeURIComponent(KEY), {cache:"no-store"});
+      if(res.status===401){
+        document.getElementById("loginErr").textContent = "מפתח שגוי";
+        if(firstLoad){ show("login"); }
+        return;
+      }
+      if(!res.ok) throw new Error("http "+res.status);
+      const data = await res.json();
+      const orders = data.orders||[];
+      // first successful auth -> persist key, show app
+      localStorage.setItem("sfl_shop_key", KEY);
+      show("app");
+      // detect new orders (after first load) for sound/flash
+      let hasNew = false;
+      orders.forEach(o=>{
+        o._fresh = false;
+        if(!seen.has(o.id)){
+          if(!firstLoad && o.status!=="done"){ o._fresh = true; hasNew = true; }
+          seen.add(o.id);
+        }
+      });
+      render(orders);
+      if(hasNew){ beep(); document.title = "🔔 הזמנה חדשה — סופלה"; setTimeout(()=>document.title="סופלה — מסך הזמנות",4000); }
+      firstLoad = false;
+      document.getElementById("updatedAt").textContent = "עודכן " + new Date().toLocaleTimeString("he-IL",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
+      document.getElementById("liveText").textContent = "מחובר";
+      document.getElementById("liveDot").classList.add("live");
+    }catch(e){
+      document.getElementById("liveText").textContent = "אין חיבור";
+      document.getElementById("liveDot").classList.remove("live");
+    }
+  }
+
+  // boot
+  if(KEY){ show("app"); poll(true); } else { show("login"); }
+  document.getElementById("keyInput") && document.getElementById("keyInput").addEventListener("keydown",e=>{ if(e.key==="Enter") doLogin(); });
+  setInterval(()=>poll(false), 8000);
+</script>
+</body>
+</html>

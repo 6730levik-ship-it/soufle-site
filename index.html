@@ -267,6 +267,10 @@
   .order-mode{display:flex;gap:8px;margin-bottom:16px}
   .order-mode button{flex:1;padding:11px;border-radius:50px;border:2px solid var(--cream-3);background:#fff;cursor:pointer;font-weight:700;font-family:inherit;color:var(--brown-soft);transition:.2s}
   .order-mode button.active{border-color:var(--coral);color:var(--coral);background:var(--cream-2)}
+  .cart-input{width:100%;margin-bottom:10px;padding:12px 16px;border:2px solid var(--cream-3);border-radius:14px;
+    font-family:inherit;font-size:1rem;color:var(--brown);background:#fff;transition:border-color .2s}
+  .cart-input::placeholder{color:var(--brown-soft);opacity:.8}
+  .cart-input:focus{outline:none;border-color:var(--coral)}
   /* ===== Micro-interactions (Claude) ===== */
   @media (prefers-reduced-motion: reduce){
     *{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
@@ -473,6 +477,8 @@
       <button id="mode-pickup" class="active" onclick="setMode('pickup')">🏃 איסוף עצמי</button>
       <button id="mode-delivery" onclick="setMode('delivery')">🛵 משלוח</button>
     </div>
+    <input id="custName" class="cart-input" type="text" placeholder="השם שלך (יופיע על הבון) *" />
+    <input id="custNotes" class="cart-input" type="text" placeholder="כתובת למשלוח / הערות (אופציונלי)" />
     <div class="total-row"><span>סה״כ</span><span class="t-val" id="cartTotal">₪0</span></div>
     <button class="checkout-btn" id="checkoutBtn" onclick="checkout()" disabled>
       💬 שליחת הזמנה בוואטסאפ
@@ -484,6 +490,8 @@
   // ====== הגדרות — שנה כאן ======
   const WHATSAPP_NUMBER = "97225099952"; // מספר הוואטסאפ של החנות (קידומת 972 בלי 0)
   const SHOP_NAME = "סופלה";
+  // מערכת ההזמנות של החנות (כל הזמנה נשמרת ומופיעה במסך החנות shop.html)
+  const ORDERS_API = "https://ujpslhbxmrpvtmdujigy.supabase.co/functions/v1/soufle-orders";
 
   // ====== רשימות בחירה משותפות (ערוך כאן) ======
   const ICE_FLAVORS = ["וניל","שוקולד","תות","פיסטוק","מוקה","עוגיות שמנת","קרמל","רום צימוקים","אגוזי לוז","לימון","מנגו","שוקוצ'יפס"];
@@ -758,19 +766,38 @@
   function checkout(){
     const ids = Object.keys(cart);
     if(ids.length===0) return;
+    const nameEl = document.getElementById("custName");
+    const name = (nameEl && nameEl.value || "").trim();
+    if(!name){
+      if(nameEl){ nameEl.focus(); nameEl.style.borderColor = "var(--coral)"; }
+      alert("רק נוסיף שם להזמנה כדי שנדע למי הבון 🙂");
+      return;
+    }
+    const notes = (document.getElementById("custNotes") && document.getElementById("custNotes").value || "").trim();
     let total=0;
-    const lines = ids.map(key=>{
+    const items = ids.map(key=>{
       const c=cart[key];
       total += c.price*c.qty;
-      return `• ${c.name} x${c.qty} — ₪${c.price*c.qty}`;
+      return { name:c.name, qty:c.qty, price:c.price };
     });
+    // נשמר במערכת ההזמנות של החנות (מופיע מיד במסך החנות + ניתן להדפסת בון).
+    // fire-and-forget עם keepalive כדי שיסתיים גם כש-WhatsApp נפתח.
+    try{
+      fetch(ORDERS_API, {
+        method:"POST", keepalive:true,
+        headers:{ "content-type":"application/json" },
+        body: JSON.stringify({ items, total, mode:orderMode, customer_name:name, notes })
+      }).catch(()=>{});
+    }catch(e){}
+    // וגם וואטסאפ (נפתח סינכרונית כדי לא להיחסם)
+    const lines = items.map(it=>`• ${it.name} x${it.qty} — ₪${it.price*it.qty}`);
     const modeTxt = orderMode==="pickup" ? "🏃 איסוף עצמי" : "🛵 משלוח";
     const msg =
       `שלום ${SHOP_NAME}! 🍦 אשמח להזמין:\n\n` +
       lines.join("\n") +
       `\n\nסוג הזמנה: ${modeTxt}` +
       `\nסה״כ: ₪${total}\n\n` +
-      `שם: \nכתובת/הערות: `;
+      `שם: ${name}\nכתובת/הערות: ${notes}`;
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, "_blank");
   }
 
