@@ -48,6 +48,14 @@
   .o-mode{display:inline-block;border-radius:50px;padding:3px 12px;font-weight:800;font-size:.82rem;margin:10px 16px 0}
   .o-mode.pickup{background:#e8f6ee;color:#2c9e6b}
   .o-mode.delivery{background:#fdeee9;color:var(--coral-dark)}
+  .o-badges{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:10px 16px 0}
+  .o-badges .o-mode{margin:0}
+  .pay-badge{display:inline-block;border-radius:50px;padding:3px 12px;font-weight:800;font-size:.82rem}
+  .pay-badge.paid{background:#e8f6ee;color:#2c9e6b}
+  .pay-badge.unpaid{background:#fff3e0;color:#d98324}
+  .order.is-unpaid{border-color:#f3c98b;box-shadow:0 0 0 2px rgba(243,201,139,.5),var(--shadow)}
+  .btn-pay{background:#2c9e6b;color:#fff}
+  .btn-pay.is-paid{background:var(--cream-3);color:var(--brown-soft)}
   .o-body{padding:6px 16px 12px;flex:1}
   .o-name{font-weight:800;font-size:1.05rem;margin:10px 0 4px}
   .o-items{list-style:none;margin:8px 0}
@@ -167,9 +175,15 @@
       const items = (o.items||[]).map(it=>
         `<li><span>${it.name}</span><span class="q">×${it.qty}</span></li>`).join("");
       const fresh = (!o._fresh) ? "" : "fresh";
-      return `<div class="order ${o.status==='done'?'done':''} ${fresh}">
+      const payBadge = o.paid
+        ? `<span class="pay-badge paid">✓ שולם</span>`
+        : `<span class="pay-badge unpaid">⏳ ממתין לתשלום</span>`;
+      return `<div class="order ${o.status==='done'?'done':''} ${o.paid?'':'is-unpaid'} ${fresh}">
         <div class="o-head"><span class="o-no">#${o.order_no}</span><span class="o-time">🕐 ${timeStr(o.created_at)}</span></div>
-        <span class="o-mode ${o.mode}">${o.mode==='delivery'?'🛵 משלוח':'🏃 איסוף עצמי'}</span>
+        <div class="o-badges">
+          <span class="o-mode ${o.mode}">${o.mode==='delivery'?'🛵 משלוח':'🏃 איסוף עצמי'}</span>
+          ${payBadge}
+        </div>
         <div class="o-body">
           <div class="o-name">👤 ${o.customer_name||'—'}</div>
           <ul class="o-items">${items}</ul>
@@ -177,8 +191,9 @@
           <div class="o-total"><span>סה״כ</span><span class="v">₪${o.total}</span></div>
         </div>
         <div class="o-foot">
-          <button class="btn btn-print" onclick="printBon('${o.id}')">🖨️ הדפסת בון</button>
-          <button class="btn btn-done ${o.status==='done'?'is-done':''}" onclick="markDone('${o.id}','${o.status==='done'?'new':'done'}')">${o.status==='done'?'↩︎ החזר':'✓ בוצע'}</button>
+          <button class="btn btn-pay ${o.paid?'is-paid':''}" onclick="markPaid('${o.id}',${o.paid?'false':'true'})">${o.paid?'↩︎ בטל תשלום':'💰 סמן כשולם'}</button>
+          <button class="btn btn-print" onclick="printBon('${o.id}')">🖨️ בון</button>
+          <button class="btn btn-done ${o.status==='done'?'is-done':''}" onclick="markDone('${o.id}','${o.status==='done'?'new':'done'}')">${o.status==='done'?'↩︎':'✓ בוצע'}</button>
         </div>
       </div>`;
     }).join("");
@@ -211,6 +226,15 @@
       await fetch(ORDERS_API+"?key="+encodeURIComponent(KEY), {
         method:"PATCH", headers:{"content-type":"application/json"},
         body: JSON.stringify({ id, status })
+      });
+      poll(true);
+    }catch(e){ alert("שגיאה בעדכון"); }
+  }
+  async function markPaid(id, paid){
+    try{
+      await fetch(ORDERS_API+"?key="+encodeURIComponent(KEY), {
+        method:"PATCH", headers:{"content-type":"application/json"},
+        body: JSON.stringify({ id, paid })
       });
       poll(true);
     }catch(e){ alert("שגיאה בעדכון"); }
