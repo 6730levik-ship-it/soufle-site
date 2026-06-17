@@ -721,7 +721,7 @@
       key = ci+"_"+ii; name = it.name; price = it.price;
     }
     if(cart[key]) cart[key].qty++;
-    else cart[key] = {name, price, emoji:em, qty:1};
+    else cart[key] = {name, base:name, opts:[], price, emoji:em, qty:1};
     renderCart();
     flashCart();
   }
@@ -809,12 +809,12 @@
     const sizeLabel = it.sizes ? it.sizes[sel.sizeIdx].label : null;
     const price = it.sizes ? it.sizes[sel.sizeIdx].price : it.price;
     const opts = selectedOpts();
-    let name = it.name;
-    if(sizeLabel) name += ` (${sizeLabel})`;
+    const base = it.name + (sizeLabel ? ` (${sizeLabel})` : "");
+    let name = base;
     if(opts.length) name += ` - ${opts.join(", ")}`;
     const key = sel.ci+"_"+sel.ii+"_"+(it.sizes?sel.sizeIdx:"x")+"_"+opts.slice().sort().join("|");
     if(cart[key]) cart[key].qty++;
-    else cart[key] = {name, price, emoji:em, qty:1};
+    else cart[key] = {name, base, opts:opts.slice(), price, emoji:em, qty:1};
     renderCart();
     closeOptions();
     flashCart();
@@ -880,7 +880,7 @@
     const items = ids.map(key=>{
       const c=cart[key];
       total += c.price*c.qty;
-      return { name:c.name, qty:c.qty, price:c.price };
+      return { name:c.name, base:c.base||c.name, opts:c.opts||[], qty:c.qty, price:c.price };
     });
     if(orderMode==="delivery"){
       items.push({ name:"משלוח (בתוך ביתר)", qty:1, price:DELIVERY_FEE });

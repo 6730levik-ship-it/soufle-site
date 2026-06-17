@@ -59,8 +59,10 @@
   .o-body{padding:6px 16px 12px;flex:1}
   .o-name{font-weight:800;font-size:1.05rem;margin:10px 0 4px}
   .o-items{list-style:none;margin:8px 0}
-  .o-items li{padding:7px 0;border-bottom:1px dashed var(--cream-3);font-size:.96rem;display:flex;justify-content:space-between;gap:8px}
+  .o-items li{padding:7px 0;border-bottom:1px dashed var(--cream-3);font-size:.96rem}
+  .o-items li .li-row{display:flex;justify-content:space-between;gap:8px}
   .o-items li .q{color:var(--coral);font-weight:800;white-space:nowrap}
+  .o-opts{color:var(--coral);font-weight:700;font-size:.85rem;margin:4px 0 0;padding-right:8px;line-height:1.55}
   .o-notes{background:var(--cream);border-radius:10px;padding:8px 11px;font-size:.9rem;color:var(--brown-soft);margin-top:8px}
   .o-total{display:flex;justify-content:space-between;font-family:'Fredoka';font-size:1.2rem;font-weight:700;margin-top:10px}
   .o-total .v{color:var(--coral)}
@@ -87,6 +89,7 @@
   .bon .big{font-size:1.15rem;font-weight:800}
   .bon ul{list-style:none;margin:6px 0}
   .bon li{padding:5px 0;border-bottom:1px dotted #999;font-size:.95rem}
+  .bon-opts{font-weight:700;padding-right:12px;margin-top:3px;line-height:1.55}
   .bon .tot{display:flex;justify-content:space-between;font-size:1.25rem;font-weight:800;margin-top:8px}
 </style>
 </head>
@@ -172,8 +175,12 @@
     document.getElementById("newCount").textContent = newOnes.length + " חדשות";
     document.getElementById("emptyMsg").style.display = orders.length ? "none" : "block";
     grid.innerHTML = orders.map(o=>{
-      const items = (o.items||[]).map(it=>
-        `<li><span>${it.name}</span><span class="q">×${it.qty}</span></li>`).join("");
+      const items = (o.items||[]).map(it=>{
+        const base = it.base || it.name;
+        const opts = (it.opts && it.opts.length)
+          ? `<div class="o-opts">${it.opts.map(o=>'➕ '+o).join('<br>')}</div>` : '';
+        return `<li><div class="li-row"><span>${base}</span><span class="q">×${it.qty}</span></div>${opts}</li>`;
+      }).join("");
       const fresh = (!o._fresh) ? "" : "fresh";
       const payBadge = o.paid
         ? `<span class="pay-badge paid">✓ שולם</span>`
@@ -202,8 +209,12 @@
   function printBon(id){
     const o = ordersCache.find(x=>x.id===id);
     if(!o) return;
-    const items = (o.items||[]).map(it=>
-      `<li><div class="row big"><span>${it.name}</span><span>×${it.qty}</span></div></li>`).join("");
+    const items = (o.items||[]).map(it=>{
+      const base = it.base || it.name;
+      const opts = (it.opts && it.opts.length)
+        ? `<div class="bon-opts">${it.opts.map(o=>'+ '+o).join('<br>')}</div>` : '';
+      return `<li><div class="row big"><span>${base}</span><span>×${it.qty}</span></div>${opts}</li>`;
+    }).join("");
     document.getElementById("printArea").innerHTML = `<div class="bon">
       <h2>סופלה 🍦</h2>
       <div class="sub">מגיע לך להתפנק</div>
