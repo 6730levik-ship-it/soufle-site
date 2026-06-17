@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="260" height="260" viewBox="0 0 260 260">
+  <g fill-opacity="0.5" stroke-opacity="0.55" stroke-linejoin="round">
+    <!-- single-scoop cone, bottom-left -->
+    <g transform="translate(20,118)">
+      <circle cx="34" cy="20" r="22" fill="#F4766B"/>
+      <circle cx="34" cy="-1" r="6" fill="#c0392b"/>
+      <path d="M12 34 L56 34 L34 92 Z" fill="#e8b98a" stroke="#a9794a" stroke-width="3"/>
+    </g>
+    <!-- popsicle, top-right -->
+    <g transform="translate(178,26)">
+      <rect x="0" y="0" width="44" height="62" rx="20" fill="#8fd3c4"/>
+      <rect x="16" y="60" width="12" height="26" rx="5" fill="#d8b48a"/>
+    </g>
+    <!-- two-scoop cup, center-bottom -->
+    <g transform="translate(108,158)">
+      <circle cx="20" cy="14" r="16" fill="#fbb9b0"/>
+      <circle cx="44" cy="14" r="16" fill="#ffd98a"/>
+      <path d="M2 26 L62 26 L54 72 L10 72 Z" fill="#ffffff" stroke="#e8c6b0" stroke-width="3"/>
+    </g>
+    <!-- small tilted cone, top-center -->
+    <g transform="translate(96,16) rotate(18)">
+      <circle cx="14" cy="10" r="13" fill="#a6c8e8"/>
+      <path d="M2 18 L26 18 L14 50 Z" fill="#e8b98a" stroke="#a9794a" stroke-width="2.5"/>
+    </g>
+    <!-- sprinkles -->
+    <g>
+      <circle cx="210" cy="150" r="5" fill="#F4766B"/>
+      <circle cx="234" cy="172" r="4" fill="#8fd3c4"/>
+      <circle cx="200" cy="182" r="4" fill="#ffd98a"/>
+      <circle cx="72" cy="232" r="5" fill="#a6c8e8"/>
+      <circle cx="40" cy="58" r="4" fill="#fbb9b0"/>
+      <circle cx="150" cy="118" r="4" fill="#F4766B"/>
+      <circle cx="246" cy="58" r="4" fill="#fbb9b0"/>
+      <circle cx="120" cy="244" r="4" fill="#ffd98a"/>
+    </g>
+  </g>
+</svg>
