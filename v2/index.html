@@ -421,9 +421,11 @@ footer a{color:var(--muted)}
 
 <div class="modal" id="payModal"><div class="card">
   <img src="brand/logo-round.svg" alt="" style="width:84px;margin:0 auto">
-  <h3>כאן נפתח דף הסליקה</h3>
-  <p>במוקאפ לא מחייבים כלום. באתר האמיתי הלקוח עובר לדף התשלום המאובטח (אשראי / Bit / Apple Pay), ורק אחרי שהתשלום מאושר ההזמנה קופצת במסך החנות:</p>
+  <h3>ההזמנה התקבלה!</h3>
+  <p>מספר ההזמנה שלך:</p>
   <div class="no" id="payNo">#1042</div>
+  <p id="payEta" style="font-weight:700;color:var(--choc)"></p>
+  <p style="font-size:12px;margin-top:10px;background:var(--cream);border-radius:12px;padding:8px">מוקאפ: התשלום מדומה. באתר האמיתי כאן נפתח דף הסליקה המאובטח, וההזמנה נכנסת למסך החנות רק אחרי שהתשלום אושר. <a href="shop.html" target="_blank" style="color:var(--pink-d);font-weight:800">למסך החנות ←</a></p>
   <button class="btn btn-pink" onclick="closeAll()" style="margin-top:8px">סגירה</button>
 </div></div>
 
@@ -631,12 +633,30 @@ function validateOrder(){
   return first;
 }
 document.addEventListener("input",e=>{const id=e.target.id;if(RULES[id]&&e.target.classList.contains("bad"))setErr(id,RULES[id](e.target.value))});
+/* שמירת הזמנה למסך החנות (shop.html) */
+function saveOrder(){
+  let list=[];try{list=JSON.parse(localStorage.getItem("sfl_orders_v2"))||[]}catch{}
+  const no=list.reduce((m,o)=>Math.max(m,o.no||1000),1000)+1;
+  const fee=mode==="delivery"?DELIVERY_FEE:0;
+  const order={id:"o"+Date.now(),no,created_at:Date.now(),status:"new",paid:true,pay_method:"אשראי",mode,
+    name:$("#cName").value.trim(),phone:$("#cPhone").value.trim(),
+    address:mode==="delivery"?{street:$("#cStreet").value.trim(),city:$("#cCity").value.trim(),apt:$("#cApt").value.trim()}:null,
+    items:cart.map(l=>({name:l.name,size:l.size,qty:l.qty,unit:l.unit,opts:l.opts,note:l.note||""})),
+    note:$("#cNote").value.trim(),delivery_fee:fee,total:cartTotal()};
+  list.push(order);try{localStorage.setItem("sfl_orders_v2",JSON.stringify(list))}catch{}
+  cart=[];saveCart();$("#cNote").value="";
+  return order;
+}
 function checkout(){
   if(!isOpen()){toast("החנות סגורה כרגע — מקבלים הזמנות כל יום 11:00–23:00");return}
+  if(localStorage.getItem("sfl_accepting")==="0"){toast("החנות לא מקבלת הזמנות אונליין כרגע — אפשר להתקשר 052-6612332");return}
   const bad=validateOrder();
   if(bad){toast("חסרים פרטים — מסומן באדום");$("#"+bad).focus();return}
   if(!$("#cAgree").checked){toast("צריך לאשר את התקנון ומדיניות הפרטיות");$("#cAgree").focus();return}
-  $("#payNo").textContent="#"+(1000+Math.floor(Math.random()*900));
+  // במוקאפ התשלום "מאושר" מיד. באמת: ההזמנה נשמרת רק אחרי אישור מחברת הסליקה (Webhook)
+  const order=saveOrder();
+  $("#payNo").textContent="#"+order.no;
+  $("#payEta").textContent=order.mode==="delivery"?"ההזמנה תגיע אליך תוך עד שעה וחצי":"נתקשר אליך כשמוכן — תוך עד 40 דק׳";
   $("#drawer").classList.remove("show");$("#payModal").classList.add("show");
 }
 

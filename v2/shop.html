@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מסך החנות · סופלה</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#452910">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800;900&family=Suez+One&display=swap" rel="stylesheet">
+<style>
+:root{--pink:#EF4263;--pink-d:#d42f50;--pink-soft:#fde3e8;--choc:#452910;--choc-2:#6b4426;--cream:#FFF7F1;--cream-2:#FBEBDD;--ink:#2a1a0c;--muted:#8a6f5c;--line:#eedccd;--ok:#22a861;--ok-soft:#e3f6ec;--warn:#e08a00;--warn-soft:#fff2d9;--late:#d42f50}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Heebo,system-ui,sans-serif;background:#f6ece3;color:var(--ink);min-height:100vh}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+a{color:inherit}
+
+/* login */
+#login{position:fixed;inset:0;z-index:50;background:var(--choc);display:grid;place-items:center;padding:16px}
+#login .card{background:var(--cream);border-radius:28px;padding:32px 28px;width:min(360px,100%);text-align:center}
+#login img{width:96px;margin:0 auto 10px}
+#login h1{font-family:"Suez One";font-weight:400;color:var(--choc);font-size:28px}
+#login p{color:var(--muted);font-size:14px;margin:4px 0 18px}
+.pin{display:flex;gap:10px;justify-content:center;margin-bottom:16px}
+.pin input{width:54px;height:62px;border-radius:16px;border:2px solid var(--line);text-align:center;font-size:28px;font-weight:800;background:#fff;color:var(--choc)}
+.pin input:focus{outline:none;border-color:var(--pink)}
+.err{color:var(--pink-d);font-weight:700;font-size:13px;min-height:18px}
+
+/* top bar */
+.bar{position:sticky;top:0;z-index:20;background:var(--choc);color:#fff;display:flex;align-items:center;gap:18px;padding:10px 20px;flex-wrap:wrap}
+.bar .brand{display:flex;align-items:center;gap:10px;font-family:"Suez One";font-size:22px}
+.bar .brand img{width:42px;height:42px;background:#fff;border-radius:50%}
+.bar .brand small{font-family:Heebo;font-size:12px;opacity:.7;display:block;line-height:1}
+.clock{font-size:26px;font-weight:900;font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.stat{display:flex;gap:16px;font-size:13px;opacity:.95}
+.stat b{display:block;font-size:20px;font-weight:900;line-height:1.1}
+.spacer{flex:1}
+.tgl{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);padding:7px 12px;border-radius:12px;font-size:13px;font-weight:700;user-select:none}
+.tgl .sw{width:38px;height:22px;border-radius:11px;background:rgba(255,255,255,.25);position:relative;transition:background .2s}
+.tgl .sw::after{content:"";position:absolute;top:3px;right:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform .2s}
+.tgl.on .sw{background:var(--ok)}
+.tgl.on .sw::after{transform:translateX(-16px)}
+.tgl.pause.on .sw{background:var(--pink)}
+.bbtn{background:rgba(255,255,255,.12);padding:9px 14px;border-radius:12px;font-weight:800;font-size:13px}
+.bbtn:hover{background:rgba(255,255,255,.2)}
+.paused-banner{display:none;background:var(--pink);color:#fff;text-align:center;font-weight:800;padding:8px}
+body.paused .paused-banner{display:block}
+
+/* board */
+.board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;padding:16px 20px 40px;align-items:start}
+.col{background:rgba(255,255,255,.45);border-radius:22px;padding:12px;min-height:60vh}
+.col h2{display:flex;justify-content:space-between;align-items:center;font-size:16px;font-weight:900;color:var(--choc);padding:4px 6px 12px}
+.col h2 span{background:var(--choc);color:#fff;border-radius:10px;min-width:28px;height:26px;display:grid;place-items:center;font-size:14px;padding:0 8px}
+.col.new h2 span{background:var(--pink)}
+.col.ready h2 span{background:var(--ok)}
+.empty{color:var(--muted);text-align:center;font-size:14px;padding:40px 10px}
+
+.ord{background:#fff;border-radius:18px;margin-bottom:12px;box-shadow:0 6px 20px -10px rgba(69,41,16,.35);overflow:hidden;border:2px solid transparent}
+.ord.fresh{border-color:var(--pink);animation:flash 1s ease-in-out 4}
+@keyframes flash{50%{box-shadow:0 0 0 8px rgba(239,66,99,.25)}}
+.oh{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--cream-2)}
+.ono{font-family:"Suez One";font-size:30px;color:var(--choc);line-height:1}
+.mode{font-size:12px;font-weight:900;padding:4px 10px;border-radius:999px;background:var(--choc);color:#fff}
+.mode.delivery{background:#1f6fd1}
+.paid{font-size:12px;font-weight:800;color:var(--ok);background:var(--ok-soft);padding:4px 9px;border-radius:999px}
+.timer{margin-inline-start:auto;text-align:left;font-size:12px;color:var(--muted);line-height:1.2}
+.timer b{display:block;font-size:20px;font-weight:900;font-variant-numeric:tabular-nums;color:var(--ink)}
+.timer.warn b{color:var(--warn)}
+.timer.late b{color:var(--late)}
+.ob{padding:12px 14px}
+.who{display:grid;gap:4px;font-size:14.5px;margin-bottom:10px}
+.who .name{font-weight:900;font-size:17px;color:var(--choc)}
+.who a{text-decoration:none;font-weight:700}
+.who .addr{background:#eef4ff;color:#1a4a9e;border-radius:10px;padding:6px 10px;font-weight:700}
+.who .addr a{color:#1f6fd1;margin-inline-start:6px;font-size:12px;text-decoration:underline}
+.items{list-style:none;border-top:1px dashed var(--line)}
+.items li{padding:9px 0;border-bottom:1px dashed var(--line)}
+.items .r{display:flex;gap:8px;align-items:baseline}
+.items .q{font-weight:900;color:var(--pink);min-width:28px}
+.items .n{font-weight:800;font-size:16px;flex:1}
+.items .n small{font-weight:600;color:var(--muted);font-size:13px}
+.items .opt{font-size:13.5px;color:var(--choc-2);margin-top:3px;padding-inline-start:36px;line-height:1.5}
+.items .opt b{color:var(--choc)}
+.items .inote{margin:5px 0 0 0;margin-inline-start:36px;background:var(--warn-soft);color:#7a4a00;font-weight:800;font-size:13px;border-radius:8px;padding:4px 8px;display:inline-block}
+.onote{margin-top:10px;background:var(--warn-soft);color:#7a4a00;font-weight:800;border-radius:12px;padding:8px 10px;font-size:14px}
+.tot{display:flex;justify-content:space-between;margin-top:10px;font-weight:900;font-size:16px}
+.tot span:last-child{font-family:"Suez One";font-weight:400;color:var(--pink);font-size:20px}
+.oa{display:flex;gap:8px;padding:0 14px 14px}
+.oa button,.oa a{flex:1;padding:12px 10px;border-radius:12px;font-weight:900;font-size:14px;text-align:center;text-decoration:none}
+.b-print{background:var(--cream);border:1.5px solid var(--line)!important;color:var(--choc);flex:0 0 auto!important;padding-inline:14px!important}
+.b-next{background:var(--choc);color:#fff}
+.b-next.ready{background:var(--ok)}
+.b-back{flex:0 0 auto!important;color:var(--muted);font-size:12px!important;text-decoration:underline!important}
+.done-list{grid-column:1/-1}
+.done-list summary{cursor:pointer;font-weight:900;color:var(--choc);padding:8px 6px}
+.done-row{display:flex;gap:12px;align-items:center;background:#fff;border-radius:12px;padding:10px 14px;margin:6px 0;font-size:14px}
+.done-row .ono{font-size:20px}
+
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--choc);color:#fff;padding:12px 18px;border-radius:14px;font-weight:800;opacity:0;transition:all .3s;z-index:60;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%)}
+
+@media (max-width:1000px){.board{grid-template-columns:1fr}.col{min-height:0}}
+
+/* ===== bon — מדפסת תרמית 80 מ"מ ===== */
+#bon{display:none}
+@media print{
+  @page{size:80mm auto;margin:0}
+  body{background:#fff}
+  body>*:not(#bon){display:none!important}
+  #bon{display:block;width:72mm;margin:0 auto;padding:3mm 0 6mm;font-family:Arial,Heebo,sans-serif;color:#000;font-size:12.5pt;line-height:1.35;direction:rtl}
+  #bon .c{text-align:center}
+  #bon .shop{font-size:18pt;font-weight:900}
+  #bon .sm{font-size:10pt}
+  #bon .no{font-size:34pt;font-weight:900;line-height:1;margin:2mm 0}
+  #bon .mode{display:inline-block;border:2px solid #000;padding:1mm 4mm;font-weight:900;font-size:14pt;color:#000;background:#fff;border-radius:0}
+  #bon hr{border:0;border-top:1.5px dashed #000;margin:2.5mm 0}
+  #bon .kv{display:flex;justify-content:space-between;gap:3mm}
+  #bon .big{font-size:14pt;font-weight:900}
+  #bon .addr{border:2px solid #000;padding:1.5mm 2mm;font-weight:900;font-size:13.5pt;margin-top:1.5mm}
+  #bon ul{list-style:none;padding:0}
+  #bon li{margin-bottom:2.2mm}
+  #bon .it{display:flex;gap:2mm;font-weight:900;font-size:13.5pt}
+  #bon .it .q{min-width:8mm}
+  #bon .op{padding-right:10mm;font-size:11.5pt}
+  #bon .nt{padding-right:10mm;font-weight:900;font-size:11.5pt}
+  #bon .note{border:2px solid #000;padding:1.5mm 2mm;font-weight:900}
+  #bon .total{font-size:16pt;font-weight:900}
+}
+</style>
+</head>
+<body>
+
+<div id="login">
+  <div class="card">
+    <img src="brand/logo-round.svg" alt="">
+    <h1>מסך החנות</h1>
+    <p>הזמנות שנכנסות מהאתר אחרי תשלום</p>
+    <div class="pin" dir="ltr">
+      <input inputmode="numeric" maxlength="1" aria-label="ספרה 1"><input inputmode="numeric" maxlength="1" aria-label="ספרה 2"><input inputmode="numeric" maxlength="1" aria-label="ספרה 3"><input inputmode="numeric" maxlength="1" aria-label="ספרה 4">
+    </div>
+    <div class="err" id="pinErr"></div>
+    <p style="font-size:12px;margin-top:10px">במוקאפ: קוד 1234</p>
+  </div>
+</div>
+
+<div class="paused-banner">⏸ קבלת הזמנות מהאתר מושהית — לקוחות רואים "לא מקבלים הזמנות כרגע"</div>
+<header class="bar">
+  <div class="brand"><img src="brand/logo-round.svg" alt=""><div>סופלה<small>מסך הזמנות</small></div></div>
+  <div class="clock" id="clock">--:--</div>
+  <div class="stat"><div><b id="sCount">0</b>הזמנות היום</div><div><b id="sSum">₪0</b>הכנסות היום</div><div><b id="sOpen">0</b>פתוחות</div></div>
+  <div class="spacer"></div>
+  <button class="tgl on" id="tSound" aria-pressed="true"><span class="sw"></span>צליל</button>
+  <button class="tgl on" id="tPrint" aria-pressed="true"><span class="sw"></span>הדפסה אוטומטית</button>
+  <button class="tgl pause" id="tPause" aria-pressed="false"><span class="sw"></span>השהיית הזמנות</button>
+  <button class="bbtn" onclick="demoOrder()">+ הזמנת דוגמה</button>
+  <button class="bbtn" onclick="logout()">יציאה</button>
+</header>
+
+<main class="board" id="board">
+  <section class="col new"><h2>חדשות <span id="cNew">0</span></h2><div id="lNew"></div></section>
+  <section class="col prep"><h2>בהכנה <span id="cPrep">0</span></h2><div id="lPrep"></div></section>
+  <section class="col ready"><h2>מוכנות לאיסוף / משלוח <span id="cReady">0</span></h2><div id="lReady"></div></section>
+  <details class="done-list"><summary>נמסרו היום (<span id="cDone">0</span>)</summary><div id="lDone"></div></details>
+</main>
+
+<div id="bon"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===== שכבת נתונים =====
+   במוקאפ: localStorage (אותו דפדפן — האתר בלשונית אחת, המסך בלשונית אחרת).
+   בגרסה האמיתית: Supabase Realtime — רק הזמנות שחברת הסליקה אישרה שולמו. */
+const STORE_KEY="sfl_orders_v2";
+const Orders={
+  all(){try{return JSON.parse(localStorage.getItem(STORE_KEY))||[]}catch{return []}},
+  save(list){try{localStorage.setItem(STORE_KEY,JSON.stringify(list))}catch{}},
+  update(id,patch){const l=this.all();const o=l.find(x=>x.id===id);if(o){Object.assign(o,patch);this.save(l)}return o},
+  onChange(cb){addEventListener("storage",e=>{if(e.key===STORE_KEY)cb()})}
+};
+const SLA={pickup:40,delivery:90};
+const PIN="1234";
+const pref={get(k,d){try{const v=localStorage.getItem("sfl_shop_"+k);return v===null?d:JSON.parse(v)}catch{return d}},set(k,v){try{localStorage.setItem("sfl_shop_"+k,JSON.stringify(v))}catch{}}};
+
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
+const hhmm=t=>new Date(t).toLocaleTimeString("he-IL",{hour:"2-digit",minute:"2-digit",timeZone:"Asia/Jerusalem"});
+const isToday=t=>new Date(t).toLocaleDateString("en-CA",{timeZone:"Asia/Jerusalem"})===new Date().toLocaleDateString("en-CA",{timeZone:"Asia/Jerusalem"});
+function toast(t){const e=$("#toast");e.textContent=t;e.classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove("show"),2200)}
+
+/* ===== כניסה ===== */
+(function(){
+  const ins=[...document.querySelectorAll(".pin input")];
+  if(sessionStorage.getItem("sfl_shop_ok")==="1"){$("#login").remove();return}
+  ins[0].focus();
+  ins.forEach((inp,k)=>{
+    inp.addEventListener("input",()=>{inp.value=inp.value.replace(/\D/g,"");if(inp.value&&k<3)ins[k+1].focus();
+      const code=ins.map(i=>i.value).join("");
+      if(code.length===4){if(code===PIN){sessionStorage.setItem("sfl_shop_ok","1");$("#login").remove();unlockAudio()}else{$("#pinErr").textContent="קוד שגוי";ins.forEach(i=>i.value="");ins[0].focus()}}});
+    inp.addEventListener("keydown",e=>{if(e.key==="Backspace"&&!inp.value&&k)ins[k-1].focus()});
+  });
+})();
+function logout(){sessionStorage.removeItem("sfl_shop_ok");location.reload()}
+
+/* ===== צליל ===== */
+let ac=null;
+function unlockAudio(){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();ac.resume()}catch{}}
+addEventListener("pointerdown",unlockAudio,{once:true});
+function ding(){
+  if(!pref.get("sound",true)||!ac)return;
+  [0,.18,.36].forEach((d,i)=>{const o=ac.createOscillator(),g=ac.createGain();o.type="sine";o.frequency.value=[880,1175,1568][i];
+    g.gain.setValueAtTime(.0001,ac.currentTime+d);g.gain.exponentialRampToValueAtTime(.4,ac.currentTime+d+.02);g.gain.exponentialRampToValueAtTime(.0001,ac.currentTime+d+.35);
+    o.connect(g).connect(ac.destination);o.start(ac.currentTime+d);o.stop(ac.currentTime+d+.4)});
+}
+
+/* ===== מתגים ===== */
+function bindToggle(id,key,def,onChange){
+  const b=$(id),set=v=>{b.classList.toggle("on",v);b.setAttribute("aria-pressed",v);pref.set(key,v);onChange&&onChange(v)};
+  set(pref.get(key,def));b.onclick=()=>set(!b.classList.contains("on"));
+}
+bindToggle("#tSound","sound",true);
+bindToggle("#tPrint","autoprint",true);
+bindToggle("#tPause","paused",false,v=>{document.body.classList.toggle("paused",v);try{localStorage.setItem("sfl_accepting",v?"0":"1")}catch{}});
+
+/* ===== תצוגה ===== */
+const STEPS={new:{next:"prep",label:"התחלת הכנה ←"},prep:{next:"ready",label:"מוכן ✓"},ready:{next:"done",label:"נמסר / יצא לשליח"}};
+const BACK={prep:"new",ready:"prep",done:"ready"};
+function elapsed(o){return Math.floor((Date.now()-o.created_at)/60000)}
+function timerHTML(o){
+  const m=elapsed(o),sla=SLA[o.mode]||40,left=sla-m;
+  const cls=left<0?"late":left<=10?"warn":"";
+  return `<div class="timer ${cls}"><b>${m} דק׳</b>${left<0?`באיחור ${-left} דק׳`:`נשארו ${left} מתוך ${sla}`}</div>`;
+}
+function itemsHTML(o){
+  return o.items.map(it=>`<li><div class="r"><span class="q">×${it.qty}</span><span class="n">${esc(it.name)}${it.size?` <small>· ${esc(it.size)}</small>`:""}</span></div>
+    ${(it.opts||[]).map(op=>`<div class="opt"><b>${esc(op.t)}:</b> ${op.v.map(esc).join(", ")}</div>`).join("")}
+    ${it.note?`<div class="inote">✎ ${esc(it.note)}</div>`:""}</li>`).join("");
+}
+function card(o){
+  const s=STEPS[o.status];
+  const addr=o.mode==="delivery"&&o.address?`${o.address.street}, ${o.address.city}${o.address.apt?" · "+o.address.apt:""}`:"";
+  const waze=addr?`https://waze.com/ul?q=${encodeURIComponent(o.address.street+" "+o.address.city)}&navigate=yes`:"";
+  return `<article class="ord${o._fresh?" fresh":""}" data-id="${o.id}">
+    <div class="oh"><span class="ono">#${o.no}</span><span class="mode ${o.mode}">${o.mode==="delivery"?"🛵 משלוח":"🏃 איסוף"}</span>${o.paid?`<span class="paid">✓ שולם · ${esc(o.pay_method||"אשראי")}</span>`:""}${timerHTML(o)}</div>
+    <div class="ob">
+      <div class="who"><span class="name">${esc(o.name)}</span><span>📞 <a href="tel:${esc(o.phone)}">${esc(o.phone)}</a> · התקבל ${hhmm(o.created_at)}</span>${addr?`<span class="addr">📍 ${esc(addr)}<a href="${waze}" target="_blank" rel="noopener">Waze</a></span>`:""}</div>
+      <ul class="items">${itemsHTML(o)}</ul>
+      ${o.note?`<div class="onote">📝 ${esc(o.note)}</div>`:""}
+      <div class="tot"><span>סה״כ${o.delivery_fee?` (כולל משלוח ₪${o.delivery_fee})`:""}</span><span>₪${o.total}</span></div>
+    </div>
+    <div class="oa"><button class="b-print" onclick="printBon('${o.id}')" aria-label="הדפסת בון">🖨 בון</button>
+      ${o.status!=="new"?`<button class="b-back" onclick="move('${o.id}','${BACK[o.status]}')">חזרה</button>`:""}
+      <button class="b-next ${o.status==="prep"?"ready":""}" onclick="move('${o.id}','${s.next}')">${s.label}</button></div>
+  </article>`;
+}
+const firstRun=pref.get("known",null)===null;
+let known=new Set(pref.get("known",[]));
+function render(){
+  const all=Orders.all().filter(o=>isToday(o.created_at)).sort((a,b)=>a.created_at-b.created_at);
+  const fresh=all.filter(o=>!known.has(o.id));
+  fresh.forEach(o=>{o._fresh=true;known.add(o.id)});
+  pref.set("known",[...known].slice(-300));
+  const by=st=>all.filter(o=>o.status===st);
+  [["new","#lNew","#cNew"],["prep","#lPrep","#cPrep"],["ready","#lReady","#cReady"]].forEach(([st,l,c])=>{
+    const list=by(st);$(c).textContent=list.length;
+    $(l).innerHTML=list.length?list.map(card).join(""):`<div class="empty">${st==="new"?"אין הזמנות חדשות כרגע":"—"}</div>`;
+  });
+  const done=by("done").reverse();$("#cDone").textContent=done.length;
+  $("#lDone").innerHTML=done.map(o=>`<div class="done-row"><span class="ono">#${o.no}</span><b>${esc(o.name)}</b><span>${o.mode==="delivery"?"משלוח":"איסוף"}</span><span>${hhmm(o.created_at)}</span><span style="margin-inline-start:auto;font-weight:900">₪${o.total}</span><button class="b-print" style="border:1.5px solid var(--line);border-radius:10px;padding:6px 10px" onclick="printBon('${o.id}')">🖨</button><button style="text-decoration:underline;color:var(--muted);font-size:12px" onclick="move('${o.id}','ready')">החזרה</button></div>`).join("");
+  $("#sCount").textContent=all.length;
+  $("#sSum").textContent="₪"+all.reduce((a,o)=>a+(o.paid?o.total:0),0);
+  $("#sOpen").textContent=all.filter(o=>o.status!=="done").length;
+  // גם הזמנות שנכנסו כשהמסך היה סגור מודפסות כשפותחים אותו (חוץ מהפעם הראשונה בכלל)
+  if(fresh.length&&(render.ready||!firstRun)){
+    ding();toast(`הזמנה חדשה #${fresh.at(-1).no} — ${fresh.at(-1).name}`);
+    if(pref.get("autoprint",true))fresh.forEach((o,k)=>setTimeout(()=>printBon(o.id),400+k*1500));
+    document.title=`(${fresh.length}) הזמנה חדשה · סופלה`;setTimeout(()=>document.title="מסך החנות · סופלה",8000);
+  }
+  render.ready=true;
+}
+function move(id,status){Orders.update(id,{status});render()}
+
+/* ===== בון ===== */
+function printBon(id){
+  const o=Orders.all().find(x=>x.id===id);if(!o)return;
+  const addr=o.mode==="delivery"&&o.address?`${o.address.street}, ${o.address.city}${o.address.apt?"<br>"+esc(o.address.apt):""}`:"";
+  $("#bon").innerHTML=`
+    <div class="c shop">סופלה</div><div class="c sm">Sweet treat · 052-6612332</div><hr>
+    <div class="c no">#${o.no}</div>
+    <div class="c"><span class="mode">${o.mode==="delivery"?"משלוח":"איסוף עצמי"}</span></div>
+    <div class="c sm" style="margin-top:1.5mm">${new Date(o.created_at).toLocaleString("he-IL",{timeZone:"Asia/Jerusalem",day:"2-digit",month:"2-digit",year:"2-digit",hour:"2-digit",minute:"2-digit"})}</div><hr>
+    <div class="kv big"><span>${esc(o.name)}</span></div>
+    <div class="kv big" dir="ltr" style="justify-content:flex-end">${esc(o.phone)}</div>
+    ${addr?`<div class="addr">${esc(o.address.street)}, ${esc(o.address.city)}${o.address.apt?"<br>"+esc(o.address.apt):""}</div>`:""}
+    <hr><ul>${o.items.map(it=>`<li><div class="it"><span class="q">${it.qty}×</span><span>${esc(it.name)}${it.size?" ("+esc(it.size)+")":""}</span></div>
+      ${(it.opts||[]).map(op=>`<div class="op">${esc(op.t)}: ${op.v.map(esc).join(", ")}</div>`).join("")}
+      ${it.note?`<div class="nt">** ${esc(it.note)} **</div>`:""}</li>`).join("")}</ul>
+    ${o.note?`<hr><div class="note">הערה: ${esc(o.note)}</div>`:""}
+    <hr>${o.delivery_fee?`<div class="kv"><span>משלוח</span><span>₪${o.delivery_fee}</span></div>`:""}
+    <div class="kv total"><span>סה״כ</span><span>₪${o.total}</span></div>
+    <div class="kv"><span>${o.paid?"שולם":"לא שולם"}</span><span>${esc(o.pay_method||"")}</span></div>
+    <hr><div class="c sm">תודה! מגיע לך להתפנק</div>`;
+  window.print();
+}
+
+/* ===== הזמנת דוגמה ===== */
+function demoOrder(){
+  const l=Orders.all(),no=(l.reduce((m,o)=>Math.max(m,o.no||1000),1000))+1,del=Math.random()<.5;
+  const o={id:"o"+Date.now(),no,created_at:Date.now(),status:"new",paid:true,pay_method:del?"Bit":"אשראי",
+    mode:del?"delivery":"pickup",name:del?"דוד לוי":"יוסי כהן",phone:del?"052-7654321":"050-1234567",
+    address:del?{street:"הרב יהודה צדקה 14",city:"ביתר עילית",apt:"קומה 2, דירה 7"}:null,
+    items:[{name:"וופל בלגי",qty:1,unit:43,opts:[{t:"רטבים",v:["נוטלה","פיסטוק"]},{t:"תוספות",v:["קינדר בואנו","לוטוס","אוראו"]},{t:"כדור גלידה / קצפת",v:["כדור גלידה"]}],note:"רוטב בצד"},
+           {name:"שייק פירות",size:"L",qty:1,unit:32,opts:[{t:"בסיס",v:["חלב"]},{t:"פירות",v:["תות","בננה","מנגו"]}]},
+           {name:"קפה הפוך",size:"גדול",qty:2,unit:15,opts:[]}],
+    note:del?"להתקשר כשמגיעים, האינטרקום לא עובד":"",delivery_fee:del?25:0};
+  o.total=o.items.reduce((a,i)=>a+i.unit*i.qty,0)+o.delivery_fee;
+  l.push(o);Orders.save(l);render();
+}
+
+/* ===== שעון ורענון ===== */
+function tick(){$("#clock").textContent=new Date().toLocaleTimeString("he-IL",{hour:"2-digit",minute:"2-digit",timeZone:"Asia/Jerusalem"});document.querySelectorAll(".ord").forEach(c=>{const o=Orders.all().find(x=>x.id===c.dataset.id);if(o){const t=c.querySelector(".timer");t.outerHTML=timerHTML(o)}})}
+Orders.onChange(render);
+render();tick();setInterval(tick,20000);setInterval(render,60000);
+</script>
+</body>
+</html>
