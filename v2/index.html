@@ -99,7 +99,11 @@ body::after{content:"";position:fixed;inset:0;z-index:99;pointer-events:none;opa
 a.btn{text-decoration:none}
 .hero-art .ring text{font-family:Heebo;font-weight:800;font-size:15.5px;letter-spacing:.32em;fill:var(--choc)}
 @keyframes spin{to{transform:rotate(360deg)}}
-.hero-art .badge{position:absolute;bottom:6%;left:2%;background:#fff;border-radius:18px;padding:12px 16px;box-shadow:var(--shadow);display:flex;gap:10px;align-items:center}
+.hero-stamp{position:absolute;left:-9%;bottom:4%;width:44%;z-index:4;filter:drop-shadow(0 14px 24px rgba(69,41,16,.28));animation:float 6s ease-in-out infinite}
+.hero-stamp img{width:100%;transform:rotate(-12deg)}
+@keyframes float{0%,100%{translate:0 0}50%{translate:0 -10px}}
+.cover-logo{width:clamp(130px,16vw,220px);margin:0 auto 10px;filter:drop-shadow(0 10px 30px rgba(0,0,0,.4))}
+.hero-art .badge{position:absolute;bottom:6%;right:0;background:#fff;border-radius:18px;padding:12px 16px;box-shadow:var(--shadow);display:flex;gap:10px;align-items:center}
 .hero-art .badge b{font-size:22px;color:var(--pink);font-family:"Suez One";font-weight:400}
 .hero-art .badge small{display:block;color:var(--muted);font-size:12px;line-height:1.2}
 .drop{position:absolute;border-radius:50% 50% 50% 0;background:var(--pink);transform:rotate(-45deg)}
@@ -290,6 +294,7 @@ footer a{color:var(--muted)}
   .hero .sub{margin-inline:auto}
   .cta-row{justify-content:center}
   .hero-art{width:min(86vw,420px);order:-1}
+  .hero-stamp{left:-3%;width:38%}
   .story{grid-template-columns:1fr 1fr}
   .story .tile:nth-child(3){transform:none}
   .story .tile:nth-child(4){display:none}
@@ -352,10 +357,11 @@ footer a{color:var(--muted)}
     <div class="drop" style="width:22px;height:22px;top:8%;right:16%"></div>
     <div class="drop" style="width:14px;height:14px;top:18%;right:6%;background:var(--choc)"></div>
     <div class="drop" style="width:18px;height:18px;bottom:20%;right:2%"></div>
+    <div class="hero-stamp"><img src="brand/logo-round.svg" alt="סופלה — Sweet treat"></div>
     <div class="badge"><b>30+</b><small>שילובים<br>שאפשר לבנות</small></div>
   </div>
   <div class="scroll-hint">גללו<span></span></div>
-  <div class="cover" aria-hidden="true"><img src="../img/hero.jpg" alt=""><div class="cover-txt"><span class="script">Sweet treat</span><h2>כל ביס —<br>רגע של פינוק.</h2></div></div>
+  <div class="cover" aria-hidden="true"><img src="../img/hero.jpg" alt=""><div class="cover-txt"><img class="cover-logo" src="brand/logo-round.svg" alt=""><h2>כל ביס —<br>רגע של פינוק.</h2></div></div>
 </section>
 
 <div class="marquee" aria-hidden="true"><div class="track" id="mqTrack"></div></div>
@@ -774,6 +780,7 @@ function heroIn(d=0){
   gsap.from(".hero .eyebrow, .hero .sub, .hero .sig, .cta-row",{y:24,opacity:0,duration:.8,stagger:.08,delay:d+.35,ease:"power3.out"});
   gsap.from(".hero-art .photo",{scale:.6,opacity:0,duration:1.2,delay:d+.1,ease:"expo.out"});
   gsap.from(".hero-art .ring",{opacity:0,duration:1.4,delay:d+.4});
+  gsap.fromTo(".hero-stamp img",{scale:2.6,rotate:-40,opacity:0,filter:"blur(6px)"},{scale:1,rotate:-12,opacity:1,filter:"blur(0px)",duration:.6,delay:d+.9,ease:"power4.in",onComplete:()=>gsap.fromTo(".hero-stamp",{x:-5},{x:0,duration:.05,repeat:5,yoyo:true})});
   gsap.from(".hero-art .badge",{y:30,opacity:0,duration:.8,delay:d+.8,ease:"back.out(1.6)"});
   gsap.from(".drop",{y:-80,opacity:0,duration:1,stagger:.12,delay:d+.6,ease:"bounce.out"});
 }
@@ -789,9 +796,11 @@ function scrollFx(){
     .fromTo(".cover",{opacity:0,clipPath:circ},{opacity:1,duration:.06,ease:"none",immediateRender:false},0)
     .fromTo(".cover",{clipPath:circ},{clipPath:full,duration:1,ease:"power2.inOut",immediateRender:false},0)
     .to(".cover img",{scale:1,duration:1.2,ease:"none"},0)
-    .to(".hero-copy",{y:-140,opacity:0,duration:.5,ease:"power2.in"},0)
+    .to(".hero-copy",{y:-140,opacity:0,duration:.4,ease:"power2.in"},.18)
+    .to(".hero-stamp",{scale:1.35,opacity:0,duration:.35,ease:"power2.in"},.1)
     .to(".hero-art .ring,.hero-art .badge,.drop,.sprk,.scroll-hint",{opacity:0,duration:.3},0)
     .fromTo(".cover-txt",{opacity:0,y:70,scale:.92},{opacity:1,y:0,scale:1,duration:.45,ease:"power3.out"},.65)
+    .fromTo(".cover-logo",{rotate:-30,scale:.5},{rotate:-8,scale:1,duration:.45,ease:"back.out(1.8)"},.65)
     .to({},{duration:.25});
   gsap.utils.toArray(".tile img").forEach(img=>gsap.to(img,{scale:1,ease:"none",scrollTrigger:{trigger:img,start:"top bottom",end:"bottom top",scrub:true}}));
   gsap.utils.toArray(".cat-hero img").forEach(img=>gsap.fromTo(img,{yPercent:-8},{yPercent:8,ease:"none",scrollTrigger:{trigger:img.parentElement,start:"top bottom",end:"bottom top",scrub:true}}));
