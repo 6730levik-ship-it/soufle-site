@@ -219,6 +219,49 @@ a.btn{text-decoration:none}
 @media (max-width:760px){.rows{grid-template-columns:1fr;padding:4px 16px}.rows .row:nth-last-child(2):nth-child(odd){border-bottom:1px dashed var(--line)}.row{gap:10px}}
 .tag{font-size:11px;font-weight:800;color:var(--pink);background:var(--pink-soft);padding:3px 8px;border-radius:8px}
 
+/* ---------- menu tiles ---------- */
+.menu2{padding:90px max(16px,6vw) 40px}
+.m2head{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap;margin-bottom:28px}
+.m2head h2{font-family:"Suez One";font-weight:400;color:var(--choc);font-size:clamp(36px,4.8vw,66px);line-height:1}
+.m2head h2 em{font-style:normal;color:var(--pink)}
+.steps{list-style:none;display:flex;gap:10px;flex-wrap:wrap}
+.steps li{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 14px 8px 10px;font-weight:700;font-size:14px;color:var(--choc)}
+.steps b{width:26px;height:26px;border-radius:50%;background:var(--pink);color:#fff;display:grid;place-items:center;font-size:13px}
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
+.tile2{position:relative;aspect-ratio:4/3.4;border-radius:28px;overflow:hidden;text-align:right;box-shadow:var(--shadow);isolation:isolate;transition:transform .5s var(--ease),box-shadow .5s var(--ease)}
+.tile2 img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transform:scale(1.15);transition:filter .5s}
+.tile2::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(42,22,8,0) 35%,rgba(42,22,8,.82))}
+.tile2:hover{transform:translateY(-6px) rotate(-.4deg);box-shadow:0 30px 60px -28px rgba(69,41,16,.6)}
+.tile2:hover img{filter:saturate(1.15) brightness(1.04)}
+.tile2:focus-visible{outline:3px solid var(--pink);outline-offset:4px}
+.t2{position:absolute;inset-inline:22px;bottom:20px;color:#fff;display:flex;flex-direction:column}
+.t2 .script{font-size:22px;color:#ffd2db;line-height:1}
+.t2 b{font-family:"Suez One";font-weight:400;font-size:clamp(26px,2.6vw,36px);line-height:1.05}
+.t2 small{font-size:13.5px;opacity:.9;margin-top:4px}
+.go2{position:absolute;top:16px;left:16px;width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.92);color:var(--choc);display:grid;place-items:center;font-size:20px;font-weight:900;transition:background .3s,color .3s,transform .4s var(--ease)}
+.tile2:hover .go2{background:var(--pink);color:#fff;transform:scale(1.1) translateX(-3px)}
+@media (max-width:900px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.tile2{border-radius:22px}.t2{inset-inline:14px;bottom:14px}.t2 .script{font-size:17px}.t2 small{font-size:12px}.go2{width:38px;height:38px;top:10px;left:10px}}
+@media (max-width:520px){.menu2{padding-top:60px}.tiles{gap:10px}.tile2{aspect-ratio:3/3.6}.t2 b{font-size:21px}}
+
+/* ---------- category panel ---------- */
+.catp{position:fixed;z-index:65;inset-inline:0;bottom:0;margin:auto;max-width:1040px;height:min(94svh,960px);background:var(--cream);border-radius:30px 30px 0 0;display:flex;flex-direction:column;transform:translateY(105%);transition:transform .55s var(--ease);overflow:hidden}
+.catp.show{transform:none}
+.cp-hero{position:relative;height:clamp(150px,22vw,220px);flex:none;overflow:hidden}
+.cp-hero img{width:100%;height:100%;object-fit:cover}
+.cp-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(42,22,8,.1),rgba(42,22,8,.75))}
+.cp-hero .x{position:absolute;top:14px;left:14px;z-index:2;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.92);display:grid;place-items:center;font-size:20px;color:var(--choc)}
+.cp-t{position:absolute;right:26px;bottom:20px;z-index:1;color:#fff}
+.cp-t .script{font-size:24px;color:#ffd2db;line-height:1}
+.cp-t h3{font-family:"Suez One";font-weight:400;font-size:clamp(32px,4vw,48px);line-height:1}
+.cp-t p{font-size:14px;opacity:.9}
+.cp-body{flex:1;overflow-y:auto;padding:22px 22px 40px}
+.cp-body .items{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+@media (max-width:520px){.cp-body{padding:14px 12px 30px}.cp-body .items{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* ריקוד שתייה — כל 20 שניות */
+@keyframes jig{0%,100%{transform:none}20%{transform:translateY(-10px) rotate(-2.5deg)}40%{transform:translateY(0) rotate(2deg)}60%{transform:translateY(-5px) rotate(-1.2deg)}80%{transform:rotate(.6deg)}}
+.dance{animation:jig .9s var(--ease) both;animation-delay:calc(var(--i,0) * 70ms)}
+
 /* ---------- builder sheet ---------- */
 .veil{position:fixed;inset:0;background:rgba(42,22,8,.5);backdrop-filter:blur(4px);z-index:60;opacity:0;pointer-events:none;transition:opacity .35s}
 .veil.show{opacity:1;pointer-events:auto}
@@ -335,13 +378,13 @@ footer a{color:var(--muted)}
 <!-- INTRO -->
 <div id="intro" aria-hidden="true">
   <div class="ink"></div>
-  <img class="stamp" src="brand/logo-round.svg" alt="">
+  <img class="stamp" src="brand/logo-clean.png" alt="">
   <button class="skip" onclick="endIntro(true)">דילוג ›</button>
 </div>
 
 <header id="hdr">
-  <a class="brand" href="#top" aria-label="סופלה — לראש העמוד"><img src="brand/logo-round.svg" alt=""><span>סופלה</span></a>
-  <nav><a href="#menu">תפריט</a><a href="#story">הפינוקים</a><a href="#info">שעות ומיקום</a></nav>
+  <a class="brand" href="#top" aria-label="סופלה — לראש העמוד"><img src="brand/logo-clean.png" alt=""><span>סופלה</span></a>
+  <nav><a href="#menu">תפריט</a><a href="#info">שעות ומיקום</a></nav>
   <button class="cart-btn" id="cartBtn" onclick="openCart()" aria-label="עגלה">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 7h12l-1.2 11.2a2 2 0 0 1-2 1.8H9.2a2 2 0 0 1-2-1.8z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
     <span class="lbl">העגלה</span><span class="count" id="cartCount">0</span>
@@ -373,44 +416,43 @@ footer a{color:var(--muted)}
     <div class="drop" style="width:22px;height:22px;top:8%;right:16%"></div>
     <div class="drop" style="width:14px;height:14px;top:18%;right:6%;background:var(--choc)"></div>
     <div class="drop" style="width:18px;height:18px;bottom:20%;right:2%"></div>
-    <div class="hero-stamp"><img src="brand/logo-round.svg" alt="סופלה — Sweet treat"></div>
+    <div class="hero-stamp"><img src="brand/logo-clean.png" alt="סופלה — Sweet treat"></div>
     <div class="badge"><b>30+</b><small>שילובים<br>שאפשר לבנות</small></div>
   </div>
   <div class="scroll-hint">גללו<span></span></div>
-  <div class="cover" aria-hidden="true"><img src="../img/hero.jpg" alt=""><div class="cover-txt"><img class="cover-logo" src="brand/logo-round.svg" alt=""><h2>כל ביס —<br>רגע של פינוק.</h2></div></div>
+  <div class="cover" aria-hidden="true"><img src="../img/hero.jpg" alt=""><div class="cover-txt"><img class="cover-logo" src="brand/logo-clean.png" alt=""><h2>כל ביס —<br>רגע של פינוק.</h2></div></div>
 </section>
 
 <div class="marquee" aria-hidden="true"><div class="track" id="mqTrack"></div></div>
 
-<section class="story" id="story">
-  <div class="head reveal"><h2>כל פינוק <em>נבנה</em><br>בדיוק בשבילך.</h2></div>
-  <div class="tile reveal" data-go="waffle"><img src="../img/waffle.jpg" alt=""><div class="t"><b>וופל בלגי</b><small>עד 3 רטבים · עד 5 תוספות</small></div></div>
-  <div class="tile reveal" data-go="frozen"><img src="../img/frozen-yogurt.jpg" alt=""><div class="t"><b>פרוזן יוגורט</b><small>עד 5 פירות טריים</small></div></div>
-  <div class="tile reveal" data-go="crepe"><img src="../img/crepe.jpg" alt=""><div class="t"><b>קרפ צרפתי</b><small>מגוון מילויים</small></div></div>
-</section>
-
-<section id="menu">
-  <div class="menu-head reveal"><h2>התפריט<br><em>של סופלה</em></h2><p style="color:var(--muted);max-width:36ch">בוחרים, בונים, משלמים. ההזמנה קופצת אצלנו במטבח ברגע שהתשלום עובר.</p></div>
-  <div class="tabs" id="tabs"></div>
-  <div id="cats"></div>
+<section class="menu2" id="menu">
+  <div class="m2head reveal">
+    <h2>מה בא לך <em>היום?</em></h2>
+    <ol class="steps"><li><b>1</b>בוחרים ובונים</li><li><b>2</b>משלמים באתר</li><li><b>3</b>איסוף עד 40 דק׳ · משלוח עד שעה וחצי</li></ol>
+  </div>
+  <div class="tiles" id="tiles"></div>
 </section>
 
 <section class="info" id="info">
-  <img class="stampbg" src="brand/logo-round.svg" alt="">
+  <img class="stampbg" src="brand/logo-clean.png" alt="">
   <div><h2>בואו <em>לאסוף</em><br>או שנביא אליכם.</h2></div>
   <div><h4>שעות פתיחה</h4><p>כל יום · 11:00–23:00</p><p style="margin-top:6px">איסוף — מוכן תוך עד 40 דק׳<br>משלוח — אצלך עד שעה וחצי</p></div>
   <div><h4>מיקום ויצירת קשר</h4><p>ביתר עילית<br>(כתובת מלאה תתעדכן)</p><p style="margin-top:8px">‎052-661-2332</p></div>
 </section>
 </main>
 
-<footer><span>© סופלה · Sweet treat</span><span><a href="terms.html">תקנון</a> · <a href="privacy.html">מדיניות פרטיות</a> · <a href="accessibility.html">הצהרת נגישות</a></span></footer>
+<footer><span>© סופלה · Sweet treat · התמונות להמחשה בלבד</span><span><a href="terms.html">תקנון</a> · <a href="privacy.html">מדיניות פרטיות</a> · <a href="accessibility.html">הצהרת נגישות</a> · <a href="credits.html">קרדיט תמונות</a></span></footer>
 
 <div class="mock-flag">מוקאפ v2 · רשימות התוספות כאן לדוגמה, עד שתשלח את הרשימה שלך</div>
 
 <!-- BUILDER -->
-<div class="veil" id="veil" onclick="closeAll()"></div>
+<div class="veil" id="veil" onclick="veilClick()"></div>
+<div class="catp" id="catp" role="dialog" aria-modal="true" aria-labelledby="cpTitle">
+  <div class="cp-hero"><img id="cpImg" alt=""><button class="x" onclick="closeAll()" aria-label="סגירה">✕</button><div class="cp-t"><span class="script" id="cpEn"></span><h3 id="cpTitle"></h3><p id="cpBlurb"></p></div></div>
+  <div class="cp-body"><div class="items" id="cpItems"></div></div>
+</div>
 <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="bTitle">
-  <div class="media"><img id="bImg" alt=""><button class="x" onclick="closeAll()" aria-label="סגירה">✕</button></div>
+  <div class="media"><img id="bImg" alt=""><button class="x" onclick="closeSheet()" aria-label="סגירה">✕</button></div>
   <div class="body" id="bBody"></div>
   <div class="foot">
     <div class="stepper"><button onclick="bQty(-1)" aria-label="פחות">−</button><span id="bQtyV">1</span><button onclick="bQty(1)" aria-label="יותר">+</button></div>
@@ -442,7 +484,7 @@ footer a{color:var(--muted)}
 </aside>
 
 <div class="modal" id="payModal"><div class="card">
-  <img src="brand/logo-round.svg" alt="" style="width:84px;margin:0 auto">
+  <img src="brand/logo-clean.png" alt="" style="width:84px;margin:0 auto">
   <h3>ההזמנה התקבלה!</h3>
   <p>מספר ההזמנה שלך:</p>
   <div class="no" id="payNo">#1042</div>
@@ -465,6 +507,7 @@ const LISTS = {
   flavors:["וניל","שוקולד","תות","פיסטוק","עוגיות","קרמל","מנגו סורבה","לימון סורבה","ריבת חלב","קינדר"],
   base:["מים","תפוזים","חלב","יוגורט","סויה","שקדים"],
   bread:["בייגל","טוסט"],
+  sahlabTop:["קוקוס","קינמון","אגוזים"],
   spreads:["גבינת שמנת","שמנת","חמאה","טחינה","פסטו","איולי"],
   veg:["עגבנייה","מלפפון","בצל סגול","חסה","זיתים","תירס","פלפל קלוי","ביצה קשה"]
 };
@@ -487,6 +530,8 @@ const BUILDERS = {
     {id:"extra",title:"כדור גלידה / קצפת",count:true,price:8,max:3,opts:["כדור גלידה","קצפת"]}]},
   scoops:{lead:"בוחרים את הטעמים לפי מספר הכדורים.",groups:[
     {id:"flavors",title:"טעמים",list:"flavors",maxFromSize:[1,2,3],minFromSize:[1,2,3]}]},
+  sahlab:{lead:"סחלב חם וסמיך — בוחרים מה מפזרים מעל.",groups:[
+    {id:"top",title:"תוספות מעל",list:"sahlabTop",max:3}]},
   bagel:{lead:"בוחרים בייגל או טוסט, ממרחים וירקות.",groups:[
     {id:"bread",title:"בייגל או טוסט",list:"bread",max:1,min:1,single:true},
     {id:"spreads",title:"ממרחים",list:"spreads",max:2},
@@ -511,7 +556,7 @@ const MENU = [
     {id:"crepe",name:"קרפ צרפתי",desc:"עם מגוון מילויים · עד 3 רטבים · עד 5 תוספות",price:25,build:"crepe"}]},
   {id:"souffle",name:"סופלה חם",en:"Chocolate souffle",img:"../img/chocolate.jpg",blurb:"הקינוח שנתן לנו את השם.",items:[
     {id:"souffle",name:"סופלה שוקולד חם עם גלידה",price:30,tag:"הדגל שלנו"}]},
-  {id:"shakes",name:"שייקים",en:"Fruit & milk shakes",img:"../img/smoothie.jpg",blurb:"שייק פירות על בסיס לבחירה, או מילק שייק סמיך.",items:[
+  {id:"shakes",name:"שייקים ומיצים",en:"Fruit & milk shakes",img:"../img/smoothie.jpg",blurb:"שייק פירות על בסיס לבחירה, או מילק שייק סמיך.",items:[
     {id:"shake",name:"שייק פירות",desc:"בסיס מים/תפוזים/חלב/יוגורט/סויה/שקדים · עד 5 פירות",sizes:[["S",22],["M",27],["L",32]],build:"shake"},
     {id:"milkshake",name:"מילק שייק",sizes:[["S",25],["M",30],["L",39]],img:"../img/milkshake.jpg"},
     {id:"juice",name:"מיץ סחוט טרי",sizes:[["S",15],["M",20],["L",30]],img:"../img/juice.jpg"}]},
@@ -520,22 +565,24 @@ const MENU = [
     {id:"salmon",name:"בייגל סלמון",price:35,img:"../img/salmon-bagel.jpg",build:"bagelfix"},
     {id:"tuna",name:"בייגל טונה",price:30,img:"../img/tuna.jpg",build:"bagelfix"},
     {id:"salad",name:"סלט",desc:"(שם המנה לאישור)",price:33,img:"../img/salad.jpg"}]},
-  {id:"coffee",name:"קפה ושתייה",en:"Drinks",img:"../img/iced-coffee.jpg",blurb:"חם, קר ומה שבאמצע.",items:[
-    {id:"iced",img:"../img/iced-coffee.jpg",name:"אייס קפה",sizes:[["S",10],["M",15],["L",20]],addons:[["תוספת פקאן",5]]},
-    {id:"espresso",img:"../img/coffee.jpg",name:"אספרסו",price:8},
-    {id:"americano",img:"../img/coffee.jpg",name:"אמריקנו",price:8},
-    {id:"latte",img:"../img/coffee.jpg",name:"קפה הפוך",sizes:[["קטן",10],["גדול",15]]},
-    {id:"nes",img:"../img/coffee.jpg",name:"נס על חלב",sizes:[["קטן",10],["גדול",15]]},
-    {id:"tea",img:"../img/coffee.jpg",name:"תה",sizes:[["קטן",8],["גדול",10]]},
-    {id:"choco",img:"../img/chocolate.jpg",name:"שוקולטה",sizes:[["קטן",15],["גדול",20]]},
-    {id:"shoko",img:"../img/milkshake.jpg",name:"שוקו",sizes:[["קטן",15],["גדול",20]]},
-    {id:"chai",img:"../img/coffee.jpg",name:"צ׳אי לאטה",sizes:[["קטן",15],["גדול",20]]},
-    {id:"chocc",img:"../img/chocolate.jpg",name:"שוקוצ׳ינו",sizes:[["קטן",15],["גדול",20]]},
-    {id:"sahlab",img:"../img/coffee.jpg",name:"סחלב",sizes:[["קטן",15],["גדול",20]]},
-    {id:"vanilla",img:"../img/coffee.jpg",name:"פרנץ׳ וניל",sizes:[["קטן",15],["גדול",20]]},
-    {id:"water",img:"../img/soda.jpg",name:"מים / סודה",price:7},
-    {id:"can",img:"../img/soda.jpg",name:"פחית",price:8},
-    {id:"bottle",img:"../img/soda.jpg",name:"בקבוק",price:10}]}
+  {id:"hot",name:"שתייה חמה",en:"Hot drinks",img:"img/drinks/latte.jpg",blurb:"קפה, תה, שוקו וסחלב — קטן או גדול.",drink:true,items:[
+    {id:"espresso",img:"img/drinks/espresso.jpg",name:"אספרסו",price:8},
+    {id:"americano",img:"img/drinks/americano.jpg",name:"אמריקנו",price:8},
+    {id:"latte",img:"img/drinks/latte.jpg",name:"קפה הפוך",sizes:[["קטן",10],["גדול",15]]},
+    {id:"nes",img:"img/drinks/nes.jpg",name:"נס על חלב",sizes:[["קטן",10],["גדול",15]]},
+    {id:"tea",img:"img/drinks/tea.jpg",name:"תה",sizes:[["קטן",8],["גדול",10]]},
+    {id:"chai",img:"img/drinks/chai.jpg",name:"צ׳אי לאטה",sizes:[["קטן",15],["גדול",20]]},
+    {id:"choco",img:"img/drinks/hot-chocolate.jpg",name:"שוקולטה",sizes:[["קטן",15],["גדול",20]]},
+    {id:"shoko",img:"img/drinks/shoko.jpg",name:"שוקו חם",sizes:[["קטן",15],["גדול",20]]},
+    {id:"chocc",img:"img/drinks/mocha.jpg",name:"שוקוצ׳ינו",sizes:[["קטן",15],["גדול",20]]},
+    {id:"sahlab",img:"img/drinks/sahlab.jpg",name:"סחלב",desc:"קוקוס · קינמון · אגוזים לבחירה",sizes:[["קטן",15],["גדול",20]],build:"sahlab"},
+    {id:"vanilla",img:"img/drinks/vanilla.jpg",name:"פרנץ׳ וניל",sizes:[["קטן",15],["גדול",20]]}]},
+  {id:"cold",name:"שתייה קרה",en:"Cold drinks",img:"img/drinks/ice-coffee.jpg",blurb:"אייס קפה גרוס, קפה קר עם קרח ושתייה קלה.",drink:true,items:[
+    {id:"iced",img:"img/drinks/ice-coffee.jpg",name:"אייס קפה",desc:"ברד קפה גרוס",sizes:[["S",10],["M",15],["L",20]],addons:[["תוספת פקאן",5]]},
+    {id:"coldbrew",img:"img/drinks/cold-coffee.jpg",name:"קפה קר",desc:"קפה וחלב על קרח (מחיר לאישור)",sizes:[["S",10],["M",15],["L",20]]},
+    {id:"water",img:"img/drinks/water.jpg",name:"מים / סודה",price:7},
+    {id:"can",img:"img/drinks/can.jpg",name:"פחית",price:8},
+    {id:"bottle",img:"img/drinks/bottle.jpg",name:"בקבוק",desc:"בקבוק זכוכית קר",price:10}]}
 ];
 const DELIVERY_FEE = 25;
 const ITEM = {}; MENU.forEach(c=>c.items.forEach(i=>ITEM[i.id]={...i,cat:c}));
@@ -552,15 +599,27 @@ function priceLabel(i){
   if(i.sizes){const ps=i.sizes.map(s=>s[1]);return `<span class="from">החל מ</span><bdi>${fmt(Math.min(...ps))}</bdi>`}
   return fmt(i.price);
 }
-function renderMenu(){
-  $("#tabs").innerHTML=MENU.map((c,k)=>`<button class="tab${k?"":" on"}" data-cat="${c.id}">${c.name}</button>`).join("");
-  $("#cats").innerHTML=MENU.map(c=>`
-    <div class="cat" id="cat-${c.id}">
-      <div class="cat-hero"><img src="${c.img}" alt="" loading="lazy"><div class="ct"><div class="script">${c.en}</div><h3>${c.name}</h3><p>${c.blurb}</p></div></div>
-      <div class="items">${c.items.map(itemCard).join("")}</div>
-    </div>`).join("");
-  document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>document.getElementById("cat-"+t.dataset.cat).scrollIntoView({behavior:"smooth"}));
+function catSub(c){
+  if(c.sub)return c.sub;
+  const ps=c.items.flatMap(i=>i.sizes?i.sizes.map(x=>x[1]):[i.price]);
+  return c.items.length>1?`${c.items.length} מנות · החל מ ₪${Math.min(...ps)}`:`החל מ ₪${Math.min(...ps)}`;
 }
+function renderMenu(){
+  $("#tiles").innerHTML=MENU.map(c=>`<button class="tile2${c.drink?" drink":""}" onclick="openCat('${c.id}')" aria-label="${c.name}">
+    <img src="${c.img}" alt="" loading="lazy"><span class="t2"><span class="script">${c.en}</span><b>${c.name}</b><small>${catSub(c)}</small></span><span class="go2" aria-hidden="true">←</span></button>`).join("");
+}
+function openCat(id){
+  const c=MENU.find(x=>x.id===id);
+  if(c.items.length===1){openBuilder(c.items[0].id);return}
+  $("#cpImg").src=c.img;$("#cpEn").textContent=c.en;$("#cpTitle").textContent=c.name;$("#cpBlurb").textContent=c.blurb;
+  $("#cpItems").innerHTML=c.items.map(itemCard).join("");
+  $("#catp").classList.toggle("drink",!!c.drink);
+  $("#catp").classList.add("show");$("#veil").classList.add("show");$("#catp .cp-body").scrollTop=0;
+  if(hasG&&!reduce)gsap.from("#cpItems .pcard",{y:40,opacity:0,duration:.6,stagger:.05,ease:"power3.out",delay:.15,clearProps:"all"});
+  setTimeout(()=>$("#catp .x").focus({preventScroll:true}),60);
+}
+function closeSheet(){$("#sheet").classList.remove("show");if(!$("#catp").classList.contains("show"))$("#veil").classList.remove("show")}
+function veilClick(){if($("#sheet").classList.contains("show")&&$("#catp").classList.contains("show"))closeSheet();else closeAll()}
 function itemCard(i){
   const it=ITEM[i.id],img=i.img||it.cat.img;
   const sub=i.desc||(i.sizes?i.sizes.map(x=>x[0]).join(" · "):"");
@@ -634,7 +693,7 @@ function renderCart(){
       <div class="opts-txt">${lineText(l)}</div>
       <div class="lb"><div class="stepper"><button onclick="lq(${k},-1)">−</button><span>${l.qty}</span><button onclick="lq(${k},1)">+</button></div><button class="rm" onclick="lq(${k},-999)">הסרה</button></div>
     </div>`).join("")+(mode==="delivery"?`<div class="cline"><div class="lt"><b>משלוח</b><b>${fmt(DELIVERY_FEE)}</b></div></div>`:"")
-    :`<div class="empty"><img src="brand/logo-round.svg" alt=""><b style="color:var(--choc)">העגלה עוד ריקה</b><p>מגיע לך להתפנק — בוא נבנה משהו.</p></div>`;
+    :`<div class="empty"><img src="brand/logo-clean.png" alt=""><b style="color:var(--choc)">העגלה עוד ריקה</b><p>מגיע לך להתפנק — בוא נבנה משהו.</p></div>`;
   $("#cartFoot").style.display=cart.length?"grid":"none";
   $("#cTotal").textContent=fmt(cartTotal());
 }
@@ -775,9 +834,9 @@ function bCommit(){
     else if((B.sel[g.id]||[]).length)opts.push({t:g.title,v:B.sel[g.id]});
   });
   addLine({id:B.it.id,name:B.it.name,size:B.it.sizes?B.it.sizes[B.sizeK][0]:null,opts,note:B.note.trim(),unit:bUnit(),qty:B.qty});
-  closeAll();
+  closeSheet();
 }
-function closeAll(){["#sheet","#drawer","#veil","#payModal"].forEach(s=>$(s).classList.remove("show"))}
+function closeAll(){["#sheet","#drawer","#veil","#payModal","#catp"].forEach(s=>$(s).classList.remove("show"))}
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeAll()});
 
 /* ================= cinematic ================= */
@@ -800,7 +859,7 @@ function intro(){
     .to("#intro .ink",{opacity:1,scale:1.15,duration:.5,ease:"power2.out"},"<.5")
     .to("#intro .stamp",{x:-6,yoyo:true,repeat:3,duration:.05},"<")
     .to("#intro .stamp",{rotate:0,duration:.6,ease:"elastic.out(1,.5)"})
-    .to({}, {duration:.35});
+    .to({}, {duration:1.3});
 }
 function heroIn(d=0){
   if(!hasG||reduce)return;
@@ -832,12 +891,8 @@ function scrollFx(){
     .fromTo(".cover-txt",{opacity:0,y:70,scale:.92},{opacity:1,y:0,scale:1,duration:.45,ease:"power3.out"},.65)
     .fromTo(".cover-logo",{rotate:-30,scale:.5},{rotate:-8,scale:1,duration:.45,ease:"back.out(1.8)"},.65)
     .to({},{duration:.25});
-  gsap.utils.toArray(".tile img").forEach(img=>gsap.to(img,{scale:1,ease:"none",scrollTrigger:{trigger:img,start:"top bottom",end:"bottom top",scrub:true}}));
-  gsap.utils.toArray(".cat-hero img").forEach(img=>gsap.fromTo(img,{yPercent:-8},{yPercent:8,ease:"none",scrollTrigger:{trigger:img.parentElement,start:"top bottom",end:"bottom top",scrub:true}}));
-  gsap.utils.toArray(".cat").forEach(cat=>{
-    gsap.from(cat.querySelectorAll(".pcard"),{y:50,opacity:0,rotate:()=>gsap.utils.random(-3,3),duration:.8,stagger:.07,ease:"power3.out",clearProps:"transform",scrollTrigger:{trigger:cat.querySelector(".items"),start:"top 88%"}});
-    ScrollTrigger.create({trigger:cat,start:"top 140px",end:"bottom 140px",onToggle:s=>{if(s.isActive){const id=cat.id.slice(4);document.querySelectorAll(".tab").forEach(t=>{const on=t.dataset.cat===id;t.classList.toggle("on",on);if(on)t.scrollIntoView({inline:"center",block:"nearest",behavior:"smooth"})})}}});
-  });
+  gsap.from(".tile2",{y:60,opacity:0,rotate:()=>gsap.utils.random(-2,2),duration:.9,stagger:.08,ease:"power3.out",clearProps:"transform,opacity",scrollTrigger:{trigger:"#tiles",start:"top 85%"}});
+  gsap.utils.toArray(".tile2 img").forEach(img=>gsap.fromTo(img,{yPercent:-6,scale:1.15},{yPercent:6,scale:1.15,ease:"none",scrollTrigger:{trigger:img.parentElement,start:"top bottom",end:"bottom top",scrub:true}}));
 }
 
 /* ================= boot ================= */
@@ -856,10 +911,15 @@ document.querySelectorAll(".hero h1 .split").forEach(el=>{el.innerHTML=[...el.te
   if(!hasG||reduce)return;
   setInterval(()=>{k=(k+1)%words.length;gsap.to(b,{yPercent:-110,opacity:0,duration:.3,ease:"power2.in",onComplete:()=>{b.textContent=words[k];gsap.fromTo(b,{yPercent:110,opacity:0},{yPercent:0,opacity:1,duration:.5,ease:"back.out(2.2)"})}})},2300);
 })();
+// ריקוד כרטיסי השתייה כל 20 שניות
+setInterval(()=>{
+  if(reduce||document.hidden)return;
+  const els=[...document.querySelectorAll(".tile2.drink, #catp.show.drink .pcard")];
+  els.forEach((e,k)=>{e.style.setProperty("--i",k);e.classList.remove("dance");void e.offsetWidth;e.classList.add("dance");e.addEventListener("animationend",()=>e.classList.remove("dance"),{once:true})});
+},20000);
 updOpen();setInterval(updOpen,60000);setMode("pickup");
 renderMenu();renderCart();
 $("#mqTrack").innerHTML=Array(2).fill(["גלידה","וופל בלגי","קרפ צרפתי","פרוזן יוגורט","שייק פירות","סופלה חם","מגיע לך להתפנק"].map(t=>`<span>${t}</span>`).join("")).join("");
-document.querySelectorAll(".tile").forEach(t=>t.onclick=()=>openBuilder(t.dataset.go));
 addEventListener("scroll",()=>$("#hdr").classList.toggle("solid",scrollY>30),{passive:true});
 intro();scrollFx();
 </script>

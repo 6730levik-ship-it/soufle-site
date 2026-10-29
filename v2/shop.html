@@ -124,7 +124,7 @@ main{max-width:760px;margin:0 auto;padding:18px 14px 60px}
 
 <div id="login">
   <div class="card">
-    <img src="brand/logo-round.svg" alt="">
+    <img src="brand/logo-clean.png" alt="">
     <h1>בונים · סופלה</h1>
     <p>הקלד את קוד העובד</p>
     <div class="pin" dir="ltr">
@@ -136,7 +136,7 @@ main{max-width:760px;margin:0 auto;padding:18px 14px 60px}
 </div>
 
 <header class="bar">
-  <img src="brand/logo-round.svg" alt="">
+  <img src="brand/logo-clean.png" alt="">
   <span class="t">בונים</span>
   <span class="clock" id="clock">--:--</span>
   <button class="gear" id="gear" aria-label="הגדרות" aria-expanded="false">⚙</button>
@@ -249,7 +249,7 @@ function render(){
   $("#hTitle").textContent=open.length?`בונים פתוחים (${open.length})`:"בונים פתוחים";
   $("#hSum").textContent=`היום: ${today.length} הזמנות · ₪${today.reduce((s,o)=>s+(o.paid?o.total:0),0)}`;
   $("#list").innerHTML=open.length?open.map(o=>bonCard({...o,_fresh:freshIds.has(o.id)})).join("")
-    :`<div class="wait"><img src="brand/logo-round.svg" alt=""><b>אין בונים פתוחים</b>בון חדש יקפוץ כאן עם צליל</div>`;
+    :`<div class="wait"><img src="brand/logo-clean.png" alt=""><b>אין בונים פתוחים</b>בון חדש יקפוץ כאן עם צליל</div>`;
   $("#cDone").textContent=done.length;
   $("#done").innerHTML=done.map(o=>`<div class="drow"><span class="no">#${o.no}</span><b>${esc(o.name)}</b><span>${o.mode==="delivery"?"משלוח":"איסוף"} · ${hhmm(o.created_at)}</span><button onclick="printBon('${o.id}')">הדפס</button><button style="margin-inline-start:0" onclick="undo('${o.id}')">החזר</button></div>`).join("");
   if(fresh.length&&(render.ready||!firstRun)){
