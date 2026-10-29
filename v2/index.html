@@ -7,6 +7,7 @@
 <meta name="description" content="סופלה — גלידה, וופל בלגי, קרפ צרפתי, פרוזן יוגורט ושייקים. מזמינים ומשלמים אונליין.">
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#EF4263">
+<script src="a11y.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800;900&family=Suez+One&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
@@ -69,6 +70,16 @@ header nav a:hover::after{transform:scaleX(1)}
 .cover-txt .script{font-size:clamp(30px,4vw,56px);color:#ffd2db}
 .cover-txt h2{font-family:"Suez One";font-weight:400;font-size:clamp(44px,8vw,120px);line-height:.95}
 body::after{content:"";position:fixed;inset:0;z-index:99;pointer-events:none;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.agree{display:flex;gap:8px;align-items:flex-start;font-size:13px;color:var(--muted);line-height:1.45}
+.agree input{width:18px;height:18px;margin-top:1px;accent-color:var(--pink);flex:none}
+.agree a{color:var(--pink-d);font-weight:700}
+.drawer.show ~ .a11y-fab,.sheet.show ~ .a11y-fab{display:none}
+.fw{display:grid;gap:4px}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#addrBox{gap:10px}
+.field.bad{border-color:#d42f50;background:#fff5f6}
+.ferr{color:#c0213f;font-size:12px;font-weight:700;min-height:0}
+.ferr:empty{display:none}
 .mode-note{font-size:12.5px;color:var(--muted);text-align:center;margin-top:-2px}
 .hero h1{font-family:"Suez One";font-weight:400;color:var(--choc);font-size:clamp(46px,7.4vw,108px);line-height:.98;margin:18px 0 10px;letter-spacing:-.01em}
 .hero h1 .line{display:block;overflow:hidden}
@@ -370,7 +381,7 @@ footer a{color:var(--muted)}
 </section>
 </main>
 
-<footer><span>© סופלה · Sweet treat</span><span><a href="#">תקנון</a> · <a href="#">מדיניות פרטיות</a> · <a href="#">נגישות</a></span></footer>
+<footer><span>© סופלה · Sweet treat</span><span><a href="terms.html">תקנון</a> · <a href="privacy.html">מדיניות פרטיות</a> · <a href="accessibility.html">הצהרת נגישות</a></span></footer>
 
 <div class="mock-flag">מוקאפ v2 · רשימות התוספות כאן לדוגמה, עד שתשלח את הרשימה שלך</div>
 
@@ -392,10 +403,17 @@ footer a{color:var(--muted)}
   <div class="df" id="cartFoot">
     <div class="seg"><button class="on" data-mode="pickup" onclick="setMode('pickup')">איסוף עצמי</button><button data-mode="delivery" onclick="setMode('delivery')">משלוח</button></div>
     <div class="mode-note" id="modeNote"></div>
-    <input class="field" id="cName" placeholder="שם מלא" autocomplete="name">
-    <input class="field" id="cPhone" placeholder="טלפון" inputmode="tel" autocomplete="tel">
-    <input class="field" id="cAddr" placeholder="כתובת למשלוח" autocomplete="street-address" style="display:none">
+    <div class="fw"><input class="field" id="cName" placeholder="שם מלא (פרטי + משפחה) *" autocomplete="name" aria-required="true" aria-describedby="eName"><small class="ferr" id="eName" role="alert"></small></div>
+    <div class="fw"><input class="field" id="cPhone" placeholder="טלפון נייד *" inputmode="tel" autocomplete="tel" aria-required="true" aria-describedby="ePhone"><small class="ferr" id="ePhone" role="alert"></small></div>
+    <div id="addrBox" style="display:none">
+      <div class="fw"><input class="field" id="cStreet" placeholder="רחוב ומספר בית *" autocomplete="address-line1" aria-required="true" aria-describedby="eStreet"><small class="ferr" id="eStreet" role="alert"></small></div>
+      <div class="frow">
+        <div class="fw"><input class="field" id="cCity" placeholder="עיר / יישוב *" value="ביתר עילית" autocomplete="address-level2" aria-required="true" aria-describedby="eCity"><small class="ferr" id="eCity" role="alert"></small></div>
+        <div class="fw"><input class="field" id="cApt" placeholder="דירה / קומה / כניסה" autocomplete="address-line2"></div>
+      </div>
+    </div>
     <textarea class="note" id="cNote" placeholder="הערות להזמנה (לא חובה)"></textarea>
+    <label class="agree"><input type="checkbox" id="cAgree"> <span>קראתי ואני מסכים/ה ל<a href="terms.html" target="_blank">תקנון</a> ול<a href="privacy.html" target="_blank">מדיניות הפרטיות</a></span></label>
     <div class="total"><span>סה״כ לתשלום</span><span id="cTotal">₪0</span></div>
     <button class="btn btn-pink" style="justify-content:center" onclick="checkout()">מעבר לתשלום מאובטח 🔒</button>
   </div>
@@ -590,20 +608,34 @@ function renderCart(){
   $("#cTotal").textContent=fmt(cartTotal());
 }
 function lq(k,d){cart[k].qty+=d;if(cart[k].qty<1)cart.splice(k,1);saveCart()}
-function setMode(m){mode=m;document.querySelectorAll(".seg button").forEach(b=>b.classList.toggle("on",b.dataset.mode===m));$("#cAddr").style.display=m==="delivery"?"block":"none";
+function setMode(m){mode=m;document.querySelectorAll(".seg button").forEach(b=>b.classList.toggle("on",b.dataset.mode===m));$("#addrBox").style.display=m==="delivery"?"grid":"none";if(m!=="delivery")["cStreet","cCity"].forEach(clearErr);
   $("#modeNote").textContent=m==="delivery"?"משלוח עד הבית · אצלך עד שעה וחצי":"איסוף מהחנות · מוכן תוך עד 40 דק׳, נתקשר כשמוכן";renderCart()}
 /* שעות פתיחה — שעון ישראל */
 const HOURS={open:11*60,close:23*60};
 function israelMinutes(){const p=new Intl.DateTimeFormat("en-GB",{timeZone:"Asia/Jerusalem",hour:"2-digit",minute:"2-digit",hour12:false}).formatToParts(new Date());const g=t=>+p.find(x=>x.type===t).value;return (g("hour")%24)*60+g("minute")}
 function isOpen(){const m=israelMinutes();return m>=HOURS.open&&m<HOURS.close}
 function updOpen(){const o=isOpen();$("#openBadge").classList.toggle("closed",!o);$("#openTxt").textContent=o?"פתוח עכשיו":"סגור כרגע · נפתחים ב-11:00"}
-function openCart(){renderCart();$("#drawer").classList.add("show");$("#veil").classList.add("show")}
+function openCart(){renderCart();$("#drawer").classList.add("show");$("#veil").classList.add("show");setTimeout(()=>$("#drawer .x").focus({preventScroll:true}),60)}
+/* פרטי הזמנה — חובה: שם מלא + טלפון, ובמשלוח גם כתובת מלאה */
+const RULES={
+  cName:v=>v.trim().split(/\s+/).filter(w=>w.length>=2).length>=2?"":"צריך שם פרטי ושם משפחה",
+  cPhone:v=>{const d=v.replace(/\D/g,"").replace(/^972/,"0");return /^05\d{8}$/.test(d)||/^0[2-9]\d{7}$/.test(d)?"":"מספר טלפון לא תקין (למשל 050-1234567)"},
+  cStreet:v=>v.trim().length<3?"צריך שם רחוב":(/\d/.test(v)?"":"חסר מספר בית"),
+  cCity:v=>v.trim().length>=2?"":"צריך עיר או יישוב"
+};
+function setErr(id,msg){const el=$("#"+id),e=$("#e"+id.slice(1));el.classList.toggle("bad",!!msg);el.setAttribute("aria-invalid",msg?"true":"false");if(e)e.textContent=msg}
+function clearErr(id){setErr(id,"")}
+function validateOrder(){
+  const ids=["cName","cPhone"].concat(mode==="delivery"?["cStreet","cCity"]:[]);let first=null;
+  ids.forEach(id=>{const m=RULES[id]($("#"+id).value);setErr(id,m);if(m&&!first)first=id});
+  return first;
+}
+document.addEventListener("input",e=>{const id=e.target.id;if(RULES[id]&&e.target.classList.contains("bad"))setErr(id,RULES[id](e.target.value))});
 function checkout(){
   if(!isOpen()){toast("החנות סגורה כרגע — מקבלים הזמנות כל יום 11:00–23:00");return}
-  const n=$("#cName").value.trim(),p=$("#cPhone").value.replace(/\D/g,"");
-  if(!n){toast("צריך שם להזמנה");$("#cName").focus();return}
-  if(p.length<9){toast("צריך מספר טלפון תקין");$("#cPhone").focus();return}
-  if(mode==="delivery"&&!$("#cAddr").value.trim()){toast("צריך כתובת למשלוח");$("#cAddr").focus();return}
+  const bad=validateOrder();
+  if(bad){toast("חסרים פרטים — מסומן באדום");$("#"+bad).focus();return}
+  if(!$("#cAgree").checked){toast("צריך לאשר את התקנון ומדיניות הפרטיות");$("#cAgree").focus();return}
   $("#payNo").textContent="#"+(1000+Math.floor(Math.random()*900));
   $("#drawer").classList.remove("show");$("#payModal").classList.add("show");
 }
@@ -620,6 +652,7 @@ function openBuilder(id){
   renderBuilder();
   $("#sheet").classList.add("show");$("#veil").classList.add("show");
   $("#bBody").scrollTop=0;
+  setTimeout(()=>$("#sheet .x").focus({preventScroll:true}),60);
 }
 function renderBuilder(){
   const {it,def}=B;
@@ -692,7 +725,7 @@ function closeAll(){["#sheet","#drawer","#veil","#payModal"].forEach(s=>$(s).cla
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeAll()});
 
 /* ================= cinematic ================= */
-const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches||!!(window.SFL_A11Y_STILL&&SFL_A11Y_STILL());
 const hasG=typeof gsap!=="undefined";
 let introDone=false;
 function endIntro(skip){
