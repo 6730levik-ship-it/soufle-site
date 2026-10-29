@@ -20,7 +20,8 @@
   --ease:cubic-bezier(.2,.8,.2,1);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;touch-action:manipulation}
+input,textarea,select{font-size:16px!important}
 body{font-family:Heebo,system-ui,sans-serif;background:var(--cream);color:var(--ink);overflow-x:hidden;line-height:1.5}
 img{display:block;max-width:100%}
 button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
@@ -220,7 +221,13 @@ a.btn{text-decoration:none}
 .tag{font-size:11px;font-weight:800;color:var(--pink);background:var(--pink-soft);padding:3px 8px;border-radius:8px}
 
 /* ---------- menu tiles ---------- */
-.menu2{padding:90px max(16px,6vw) 40px}
+.menu2{padding:90px max(16px,6vw) 40px;position:relative;overflow:hidden;isolation:isolate}
+.m2head,.tiles{position:relative;z-index:1}
+/* טיפות גלידה ורודות ברקע */
+.drips{position:absolute;inset:0;z-index:0;pointer-events:none}
+.drips svg{position:absolute;top:-60px;animation:fall linear infinite;opacity:0}
+@keyframes fall{0%{transform:translateY(0) scale(.6);opacity:0}8%{opacity:var(--o,.7)}85%{opacity:var(--o,.7)}100%{transform:translateY(var(--h,1400px)) scale(1);opacity:0}}
+@media (prefers-reduced-motion:reduce){.drips{display:none}}
 .m2head{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap;margin-bottom:28px}
 .m2head h2{font-family:"Suez One";font-weight:400;color:var(--choc);font-size:clamp(36px,4.8vw,66px);line-height:1}
 .m2head h2 em{font-style:normal;color:var(--pink)}
@@ -431,13 +438,14 @@ footer a{color:var(--muted)}
     <ol class="steps"><li><b>1</b>בוחרים ובונים</li><li><b>2</b>משלמים באתר</li><li><b>3</b>איסוף עד 40 דק׳ · משלוח עד שעה וחצי</li></ol>
   </div>
   <div class="tiles" id="tiles"></div>
+  <div class="drips" id="drips" aria-hidden="true"></div>
 </section>
 
 <section class="info" id="info">
   <img class="stampbg" src="brand/logo-clean.png" alt="">
   <div><h2>בואו <em>לאסוף</em><br>או שנביא אליכם.</h2></div>
   <div><h4>שעות פתיחה</h4><p>כל יום · 11:00–23:00</p><p style="margin-top:6px">איסוף — מוכן תוך עד 40 דק׳<br>משלוח — אצלך עד שעה וחצי</p></div>
-  <div><h4>מיקום ויצירת קשר</h4><p>ביתר עילית<br>(כתובת מלאה תתעדכן)</p><p style="margin-top:8px">‎052-661-2332</p></div>
+  <div><h4>מיקום ויצירת קשר</h4><p>אלעזר המודעי 7, ביתר עילית<br><a href="https://waze.com/ul?q=%D7%90%D7%9C%D7%A2%D7%96%D7%A8%20%D7%94%D7%9E%D7%95%D7%93%D7%A2%D7%99%207%20%D7%91%D7%99%D7%AA%D7%A8%20%D7%A2%D7%99%D7%9C%D7%99%D7%AA&navigate=yes" target="_blank" rel="noopener" style="color:#ffd2db;font-weight:700">ניווט ב-Waze ←</a></p><p style="margin-top:8px">‎052-661-2332</p></div>
 </section>
 </main>
 
@@ -546,7 +554,8 @@ const MENU = [
   {id:"icecream",name:"גלידה",en:"Ice cream",img:"../img/icecream.jpg",blurb:"גלידה איטלקית במגוון טעמים, בגביע או בכוס.",items:[
     {id:"scoops",name:"גלידה בכדורים",sizes:[["טעם אחד",15],["2 טעמים",22],["3 טעמים",30]],build:"scoops"},
     {id:"bulk",name:"גלידה במשקל",sizes:[["חצי ק״ג",48],["1 ק״ג",85]],build:"bulk"},
-    {id:"american",img:"../img/icecream-cup.jpg",name:"גלידה אמריקאית",price:16}]},
+    {id:"american",img:"../img/icecream-cup.jpg",name:"גלידה אמריקאית",price:16},
+    {id:"milkshake",name:"מילק שייק",sizes:[["S",25],["M",30],["L",39]],img:"../img/milkshake.jpg"}]},
   {id:"frozen",name:"פרוזן יוגורט",en:"Frozen yogurt",img:"../img/frozen-yogurt.jpg",blurb:"עד 5 פירות ותוספות שוקולד לבחירה.",items:[
     {id:"frozen",name:"פרוזן יוגורט",desc:"עד 5 פירות · עד 3 תוספות שוקולד",sizes:[["M",25],["L",32]],build:"frozen"}]},
   {id:"waffle",name:"וופל בלגי",en:"Belgian waffle",img:"../img/waffle.jpg",blurb:"עד 3 רטבים ועד 5 תוספות.",items:[
@@ -556,10 +565,8 @@ const MENU = [
     {id:"crepe",name:"קרפ צרפתי",desc:"עם מגוון מילויים · עד 3 רטבים · עד 5 תוספות",price:25,build:"crepe"}]},
   {id:"souffle",name:"סופלה חם",en:"Chocolate souffle",img:"../img/chocolate.jpg",blurb:"הקינוח שנתן לנו את השם.",items:[
     {id:"souffle",name:"סופלה שוקולד חם עם גלידה",price:30,tag:"הדגל שלנו"}]},
-  {id:"shakes",name:"שייקים ומיצים",en:"Fruit & milk shakes",img:"../img/smoothie.jpg",blurb:"שייק פירות על בסיס לבחירה, או מילק שייק סמיך.",items:[
-    {id:"shake",name:"שייק פירות",desc:"בסיס מים/תפוזים/חלב/יוגורט/סויה/שקדים · עד 5 פירות",sizes:[["S",22],["M",27],["L",32]],build:"shake"},
-    {id:"milkshake",name:"מילק שייק",sizes:[["S",25],["M",30],["L",39]],img:"../img/milkshake.jpg"},
-    {id:"juice",name:"מיץ סחוט טרי",sizes:[["S",15],["M",20],["L",30]],img:"../img/juice.jpg"}]},
+  {id:"shakes",name:"שייק פירות",en:"Fruit shake",img:"../img/smoothie.jpg",blurb:"שייק פירות טרי על בסיס לבחירה.",sub:"עד 5 פירות · החל מ ₪22",items:[
+    {id:"shake",name:"שייק פירות",desc:"בסיס מים/תפוזים/חלב/יוגורט/סויה/שקדים · עד 5 פירות",sizes:[["S",22],["M",27],["L",32]],build:"shake"}]},
   {id:"bagel",name:"בייגל / טוסט",en:"Bagel / Toast",img:"../img/bagel.jpg",blurb:"לפני הקינוח — משהו מלוח.",items:[
     {id:"bagel",name:"בייגל / טוסט",price:28,build:"bagel"},
     {id:"salmon",name:"בייגל סלמון",price:35,img:"../img/salmon-bagel.jpg",build:"bagelfix"},
@@ -578,6 +585,7 @@ const MENU = [
     {id:"sahlab",img:"img/drinks/sahlab.jpg",name:"סחלב",desc:"קוקוס · קינמון · אגוזים · פיסטוק טחון",sizes:[["קטן",15],["גדול",20]],build:"sahlab"},
     {id:"vanilla",img:"img/drinks/vanilla.jpg",name:"פרנץ׳ וניל",sizes:[["קטן",15],["גדול",20]]}]},
   {id:"cold",name:"שתייה קרה",en:"Cold drinks",img:"img/drinks/ice-coffee.jpg",blurb:"אייס קפה גרוס, קפה קר עם קרח ושתייה קלה.",drink:true,items:[
+    {id:"juice",name:"מיץ סחוט טרי",sizes:[["S",15],["M",20],["L",30]],img:"../img/juice.jpg"},
     {id:"iced",img:"img/drinks/ice-coffee.jpg",name:"אייס קפה",desc:"ברד קפה גרוס",sizes:[["S",10],["M",15],["L",20]],addons:[["תוספת פקאן",5]]},
     {id:"coldbrew",img:"img/drinks/cold-coffee.jpg",name:"קפה קר",desc:"קפה וחלב על קרח (מחיר לאישור)",sizes:[["S",10],["M",15],["L",20]]},
     {id:"water",img:"img/drinks/water.jpg",name:"מים / סודה",price:7},
@@ -876,12 +884,14 @@ function heroIn(d=0){
 function scrollFx(){
   if(!hasG||reduce||typeof ScrollTrigger==="undefined"){document.querySelectorAll(".reveal").forEach(e=>{e.style.opacity=1;e.style.transform="none"});return}
   gsap.registerPlugin(ScrollTrigger);
+  ScrollTrigger.config({ignoreMobileResize:true});
   gsap.utils.toArray(".reveal").forEach(el=>gsap.to(el,{opacity:1,y:0,duration:1,ease:"power3.out",scrollTrigger:{trigger:el,start:"top 88%"}}));
   // סצנה: התמונה העגולה נפתחת למסך מלא בזמן גלילה
   const hero=$(".hero"),photo=$(".hero-art .photo");
   const circ=()=>{const h=hero.getBoundingClientRect(),p=photo.getBoundingClientRect();return `circle(${p.width/2}px at ${p.left-h.left+p.width/2}px ${p.top-h.top+p.height/2}px)`};
   const full=()=>`circle(${Math.hypot(hero.offsetWidth,hero.offsetHeight)}px at ${hero.offsetWidth/2}px ${hero.offsetHeight/2}px)`;
-  gsap.timeline({scrollTrigger:{trigger:hero,start:"top top",end:"+=130%",pin:true,scrub:.7,invalidateOnRefresh:true}})
+  // הסצנה הקולנועית רק במחשב — בטלפון היא נראית כמו זום שקופץ לבד
+  if(matchMedia("(min-width:901px) and (pointer:fine)").matches)gsap.timeline({scrollTrigger:{trigger:hero,start:"top top",end:"+=130%",pin:true,scrub:.7,invalidateOnRefresh:true}})
     .fromTo(".cover",{opacity:0,clipPath:circ},{opacity:1,duration:.06,ease:"none",immediateRender:false},0)
     .fromTo(".cover",{clipPath:circ},{clipPath:full,duration:1,ease:"power2.inOut",immediateRender:false},0)
     .to(".cover img",{scale:1,duration:1.2,ease:"none"},0)
@@ -917,6 +927,17 @@ setInterval(()=>{
   const els=[...document.querySelectorAll(".tile2.drink, #catp.show.drink .pcard")];
   els.forEach((e,k)=>{e.style.setProperty("--i",k);e.classList.remove("dance");void e.offsetWidth;e.classList.add("dance");e.addEventListener("animationend",()=>e.classList.remove("dance"),{once:true})});
 },20000);
+// טיפות גלידה בגווני ורוד שנוטפות בין הריבועים
+(()=>{const box=$("#drips");if(!box||reduce)return;
+  const shades=["#EF4263","#F26A85","#F78FA4","#FBB4C3","#FCCFD9","#E8577A","#FF9EB5","#F4A6B8"];
+  const n=innerWidth<700?12:22,h=$("#menu").offsetHeight+120;
+  let html="";
+  for(let i=0;i<n;i++){
+    const sz=8+Math.random()*16,x=Math.random()*100,dur=9+Math.random()*10,del=-Math.random()*dur,col=shades[i%shades.length],o=(.35+Math.random()*.45).toFixed(2);
+    html+=`<svg width="${sz}" height="${sz*1.35}" viewBox="0 0 20 27" style="left:${x}%;animation-duration:${dur}s;animation-delay:${del}s;--o:${o};--h:${h}px"><path d="M10 0C10 0 0 12.5 0 17a10 10 0 0 0 20 0C20 12.5 10 0 10 0z" fill="${col}"/><ellipse cx="6.5" cy="17" rx="2" ry="3" fill="#fff" opacity=".45"/></svg>`;
+  }
+  box.innerHTML=html;
+})();
 updOpen();setInterval(updOpen,60000);setMode("pickup");
 renderMenu();renderCart();
 $("#mqTrack").innerHTML=Array(2).fill(["גלידה","וופל בלגי","קרפ צרפתי","פרוזן יוגורט","שייק פירות","סופלה חם","מגיע לך להתפנק"].map(t=>`<span>${t}</span>`).join("")).join("");
