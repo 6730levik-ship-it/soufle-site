@@ -1,0 +1,642 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>סופלה · Sweet treat</title>
+<meta name="description" content="סופלה — גלידה, וופל בלגי, קרפ צרפתי, פרוזן יוגורט ושייקים. מזמינים ומשלמים אונליין.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#EF4263">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800;900&family=Suez+One&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pink:#EF4263; --pink-d:#d42f50; --pink-soft:#fde3e8;
+  --choc:#452910; --choc-2:#6b4426; --cream:#FFF7F1; --cream-2:#FBEBDD;
+  --ink:#2a1a0c; --muted:#8a6f5c; --line:#eedccd; --white:#fff;
+  --r:22px; --shadow:0 18px 50px -18px rgba(69,41,16,.35);
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:Heebo,system-ui,sans-serif;background:var(--cream);color:var(--ink);overflow-x:hidden;line-height:1.5}
+img{display:block;max-width:100%}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+input,textarea{font:inherit}
+.script{font-family:"Dancing Script",cursive}
+.display{font-family:"Suez One",serif;font-weight:400}
+
+/* ---------- intro ---------- */
+#intro{position:fixed;inset:0;z-index:100;background:var(--cream);display:grid;place-items:center;overflow:hidden}
+#intro .stamp{width:min(62vw,340px);opacity:0}
+#intro .ink{position:absolute;width:min(90vw,520px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,var(--pink-soft) 0,transparent 65%);opacity:0;transform:scale(.3)}
+#intro .skip{position:absolute;bottom:28px;inset-inline:0;margin:auto;width:max-content;font-size:13px;color:var(--muted);letter-spacing:.06em}
+
+/* ---------- header ---------- */
+header{position:fixed;top:0;inset-inline:0;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px max(16px,4vw);transition:background .35s,box-shadow .35s,padding .35s}
+header.solid{background:rgba(255,247,241,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 1px 0 var(--line);padding-block:8px}
+header .brand{display:flex;align-items:center;gap:10px}
+header .brand img{width:46px;height:46px}
+header .brand span{font-family:"Suez One";font-size:22px;color:var(--choc)}
+header nav{display:flex;gap:26px;font-weight:600;font-size:15px}
+header nav a{color:var(--choc);text-decoration:none;position:relative}
+header nav a::after{content:"";position:absolute;inset-inline:0;bottom:-4px;height:2px;background:var(--pink);transform:scaleX(0);transition:transform .3s var(--ease)}
+header nav a:hover::after{transform:scaleX(1)}
+.cart-btn{position:relative;display:flex;align-items:center;gap:8px;background:var(--choc);color:#fff;padding:10px 16px;border-radius:999px;font-weight:700;font-size:14px;box-shadow:var(--shadow)}
+.cart-btn .count{min-width:22px;height:22px;border-radius:11px;background:var(--pink);display:grid;place-items:center;font-size:12px;padding:0 6px}
+.cart-btn.bump{animation:bump .5s var(--ease)}
+@keyframes bump{30%{transform:scale(1.15)}60%{transform:scale(.95)}}
+
+/* ---------- hero ---------- */
+.hero{min-height:100svh;display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:4vw;padding:110px max(16px,6vw) 60px;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;width:70vw;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,var(--pink-soft),transparent 62%);top:-20vw;left:-25vw;z-index:-1}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);padding:6px 14px;border-radius:999px;font-size:13px;font-weight:700;color:var(--pink)}
+.eyebrow i{width:8px;height:8px;border-radius:50%;background:#2fbf71;box-shadow:0 0 0 4px rgba(47,191,113,.18)}
+.hero h1{font-family:"Suez One";font-weight:400;color:var(--choc);font-size:clamp(46px,7.4vw,108px);line-height:.98;margin:18px 0 10px;letter-spacing:-.01em}
+.hero h1 .line{display:block;overflow:hidden}
+.hero h1 .line > span{display:inline-block}
+.hero h1 em{font-style:normal;color:var(--pink)}
+.hero .sub{font-size:clamp(16px,1.5vw,20px);color:var(--muted);max-width:30ch}
+.hero .sig{font-family:"Dancing Script";color:var(--pink);font-size:clamp(28px,3vw,40px);margin-top:4px}
+.cta-row{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:16px 26px;border-radius:999px;font-weight:800;font-size:16px;transition:transform .25s var(--ease),box-shadow .25s}
+.btn-pink{background:var(--pink);color:#fff;box-shadow:0 14px 30px -10px rgba(239,66,99,.6)}
+.btn-pink:hover{transform:translateY(-2px);box-shadow:0 18px 36px -10px rgba(239,66,99,.7)}
+.btn-ghost{background:#fff;color:var(--choc);border:1.5px solid var(--line)}
+.hero-art{position:relative;aspect-ratio:1;width:min(100%,560px);justify-self:center}
+.hero-art .photo{position:absolute;inset:12%;border-radius:50%;overflow:hidden;box-shadow:var(--shadow)}
+.hero-art .photo img{width:100%;height:100%;object-fit:cover;transform:scale(1.15)}
+.hero-art .ring{position:absolute;inset:0;animation:spin 28s linear infinite}
+.hero-art .ring text{font-family:Heebo;font-weight:800;font-size:15.5px;letter-spacing:.32em;fill:var(--choc)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hero-art .badge{position:absolute;bottom:6%;left:2%;background:#fff;border-radius:18px;padding:12px 16px;box-shadow:var(--shadow);display:flex;gap:10px;align-items:center}
+.hero-art .badge b{font-size:22px;color:var(--pink);font-family:"Suez One";font-weight:400}
+.hero-art .badge small{display:block;color:var(--muted);font-size:12px;line-height:1.2}
+.drop{position:absolute;border-radius:50% 50% 50% 0;background:var(--pink);transform:rotate(-45deg)}
+.scroll-hint{position:absolute;bottom:22px;inset-inline:0;margin:auto;width:max-content;font-size:12px;color:var(--muted);letter-spacing:.2em;display:flex;flex-direction:column;align-items:center;gap:8px}
+.scroll-hint span{width:1px;height:38px;background:linear-gradient(var(--choc),transparent);animation:drip 1.8s ease-in-out infinite;transform-origin:top}
+@keyframes drip{0%{transform:scaleY(0)}50%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
+
+/* ---------- marquee ---------- */
+.marquee{background:var(--pink);color:#fff;overflow:hidden;padding:16px 0;transform:rotate(-1.6deg);margin:0 -4vw;box-shadow:0 10px 30px -14px rgba(239,66,99,.6)}
+.marquee .track{display:flex;gap:40px;width:max-content;animation:mq 26s linear infinite;font-family:"Suez One";font-size:clamp(20px,2.6vw,32px);white-space:nowrap}
+.marquee .track span::after{content:"✕";margin-inline-start:40px;opacity:.6;font-size:.6em;vertical-align:middle}
+@keyframes mq{to{transform:translateX(50%)}}
+
+/* ---------- story ---------- */
+.story{padding:120px max(16px,6vw) 60px;display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.story .head{grid-column:1/-1;max-width:760px;margin-bottom:20px}
+.story .head h2,.menu-head h2{font-family:"Suez One";font-weight:400;color:var(--choc);font-size:clamp(34px,4.6vw,64px);line-height:1.02}
+.story .head h2 em,.menu-head h2 em{font-style:normal;color:var(--pink)}
+.tile{position:relative;border-radius:var(--r);overflow:hidden;aspect-ratio:3/4;box-shadow:var(--shadow);cursor:pointer}
+.tile img{width:100%;height:100%;object-fit:cover;transform:scale(1.18)}
+.tile::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 45%,rgba(42,22,8,.78))}
+.tile .t{position:absolute;bottom:18px;inset-inline:20px;z-index:1;color:#fff}
+.tile .t b{font-family:"Suez One";font-weight:400;font-size:28px;display:block}
+.tile .t small{opacity:.85}
+.tile:nth-child(3){transform:translateY(40px)}
+
+/* ---------- menu ---------- */
+#menu{padding:80px 0 120px}
+.menu-head{padding:0 max(16px,6vw);display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap}
+.tabs{position:sticky;top:62px;z-index:30;display:flex;gap:8px;overflow-x:auto;padding:14px max(16px,6vw);background:linear-gradient(var(--cream) 70%,transparent);scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;padding:10px 18px;border-radius:999px;background:#fff;border:1.5px solid var(--line);font-weight:700;font-size:14px;color:var(--choc);transition:all .25s}
+.tab.on{background:var(--choc);border-color:var(--choc);color:#fff}
+.cat{padding:30px max(16px,6vw) 10px;scroll-margin-top:120px}
+.cat-hero{position:relative;border-radius:28px;overflow:hidden;height:clamp(180px,26vw,320px);margin-bottom:22px}
+.cat-hero img{width:100%;height:130%;object-fit:cover;position:absolute;top:-15%}
+.cat-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 30%,rgba(42,22,8,.72))}
+.cat-hero .ct{position:absolute;right:clamp(20px,4vw,48px);bottom:clamp(18px,3vw,36px);color:#fff;z-index:1}
+.cat-hero .ct h3{font-family:"Suez One";font-weight:400;font-size:clamp(34px,4.4vw,58px);line-height:1}
+.cat-hero .ct .script{font-size:clamp(20px,2.2vw,30px);color:#ffd2db}
+.cat-hero .ct p{opacity:.9;font-size:14px;margin-top:6px;max-width:40ch}
+.items{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.item{background:#fff;border:1px solid var(--line);border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:12px;transition:transform .3s var(--ease),box-shadow .3s}
+.item:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.item .top{display:flex;justify-content:space-between;gap:10px;align-items:start}
+.item h4{font-size:18px;font-weight:800;color:var(--choc);line-height:1.25}
+.item .desc{font-size:13px;color:var(--muted)}
+.item .price{font-family:"Suez One";color:var(--pink);font-size:20px;white-space:nowrap}
+.item .price small{font-family:Heebo;font-size:12px;color:var(--muted);font-weight:500}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{padding:7px 12px;border-radius:12px;border:1.5px solid var(--line);font-size:13px;font-weight:700;color:var(--choc);background:var(--cream)}
+.chip.on{border-color:var(--pink);background:var(--pink-soft);color:var(--pink-d)}
+.item .act{margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.add{white-space:nowrap;flex:none;background:var(--choc);color:#fff;padding:10px 16px;border-radius:12px;font-weight:800;font-size:14px;display:inline-flex;gap:6px;align-items:center;transition:background .2s}
+.add:hover{background:var(--pink)}
+.add.build{background:var(--pink)}
+.add.build:hover{background:var(--pink-d)}
+.tag{font-size:11px;font-weight:800;color:var(--pink);background:var(--pink-soft);padding:3px 8px;border-radius:8px}
+
+/* ---------- builder sheet ---------- */
+.veil{position:fixed;inset:0;background:rgba(42,22,8,.5);backdrop-filter:blur(4px);z-index:60;opacity:0;pointer-events:none;transition:opacity .35s}
+.veil.show{opacity:1;pointer-events:auto}
+.sheet{position:fixed;z-index:70;inset-inline:0;bottom:0;margin:auto;max-width:760px;height:min(92svh,860px);background:var(--cream);border-radius:28px 28px 0 0;display:flex;flex-direction:column;transform:translateY(105%);transition:transform .5s var(--ease);overflow:hidden}
+.sheet.show{transform:none}
+.sheet .media{position:relative;height:200px;flex:none;overflow:hidden}
+.sheet .media img{width:100%;height:100%;object-fit:cover}
+.sheet .media::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 30%,var(--cream))}
+.sheet .x{position:absolute;top:14px;left:14px;z-index:2;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.92);display:grid;place-items:center;font-size:20px;color:var(--choc)}
+.sheet .body{flex:1;overflow-y:auto;padding:0 22px 20px;margin-top:-50px;position:relative;z-index:1}
+.sheet h3{font-family:"Suez One";font-weight:400;font-size:34px;color:var(--choc);line-height:1.05}
+.sheet .lead{color:var(--muted);font-size:14px;margin:4px 0 6px}
+.group{background:#fff;border:1px solid var(--line);border-radius:20px;padding:16px;margin-top:14px}
+.group .gh{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:10px}
+.group .gh b{font-size:16px;color:var(--choc)}
+.group .gh small{display:block;font-size:12px;color:var(--muted);font-weight:500}
+.meter{display:flex;align-items:center;gap:8px;font-weight:800;font-size:13px;color:var(--choc)}
+.meter .bar{width:64px;height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+.meter .bar i{display:block;height:100%;background:var(--pink);transition:width .3s var(--ease)}
+.meter.full{color:var(--pink)}
+.meter.full .bar{animation:shake .4s}
+@keyframes shake{25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opt{padding:10px 14px;border-radius:14px;border:1.5px solid var(--line);background:var(--cream);font-weight:700;font-size:14px;color:var(--choc);transition:all .2s var(--ease);display:inline-flex;gap:6px;align-items:center}
+.opt .p{font-size:12px;color:var(--muted);font-weight:600}
+.opt.on{background:var(--choc);border-color:var(--choc);color:#fff}
+.opt.on .p{color:#f3d6c3}
+.opt:disabled{opacity:.35;cursor:not-allowed}
+.opt.pop{animation:pop .35s var(--ease)}
+@keyframes pop{50%{transform:scale(1.1)}}
+.stepper{display:inline-flex;align-items:center;gap:4px;background:var(--cream);border:1.5px solid var(--line);border-radius:14px;padding:4px}
+.stepper button{width:34px;height:34px;border-radius:10px;font-size:18px;font-weight:800;color:var(--choc)}
+.stepper button:hover{background:#fff}
+.stepper span{min-width:26px;text-align:center;font-weight:800}
+.note{width:100%;border:1.5px solid var(--line);border-radius:14px;padding:12px;background:var(--cream);resize:none;min-height:64px}
+.toast{position:fixed;bottom:110px;inset-inline:0;margin:auto;width:max-content;max-width:90vw;background:var(--choc);color:#fff;padding:12px 18px;border-radius:14px;font-weight:700;font-size:14px;z-index:90;opacity:0;transform:translateY(10px);transition:all .3s var(--ease);pointer-events:none}
+.toast.show{opacity:1;transform:none}
+.sheet .foot{flex:none;padding:14px 22px calc(14px + env(safe-area-inset-bottom));background:#fff;border-top:1px solid var(--line);display:flex;gap:12px;align-items:center}
+.sheet .foot .btn{flex:1;justify-content:space-between}
+.missing{font-size:12px;color:var(--pink-d);font-weight:700;margin-top:8px;min-height:18px}
+
+/* ---------- cart drawer ---------- */
+.drawer{position:fixed;z-index:70;top:0;bottom:0;left:0;width:min(440px,100vw);background:var(--cream);transform:translateX(-105%);transition:transform .5s var(--ease);display:flex;flex-direction:column;box-shadow:30px 0 60px -30px rgba(42,22,8,.4)}
+.drawer.show{transform:none}
+.drawer .dh{display:flex;justify-content:space-between;align-items:center;padding:20px 22px;border-bottom:1px solid var(--line)}
+.drawer .dh h3{font-family:"Suez One";font-weight:400;font-size:28px;color:var(--choc)}
+.drawer .list{flex:1;overflow-y:auto;padding:12px 22px}
+.cline{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;margin-bottom:10px}
+.cline .lt{display:flex;justify-content:space-between;gap:8px}
+.cline b{color:var(--choc)}
+.cline .opts-txt{font-size:12.5px;color:var(--muted);margin-top:4px;line-height:1.5}
+.cline .lb{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+.cline .rm{font-size:12px;color:var(--muted);text-decoration:underline}
+.empty{text-align:center;color:var(--muted);padding:60px 10px}
+.empty img{width:110px;margin:0 auto 14px;opacity:.9}
+.drawer .df{padding:16px 22px calc(16px + env(safe-area-inset-bottom));border-top:1px solid var(--line);background:#fff;display:grid;gap:10px}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--cream);border:1.5px solid var(--line);border-radius:14px;padding:4px}
+.seg button{padding:10px;border-radius:10px;font-weight:800;font-size:14px;color:var(--choc)}
+.seg button.on{background:var(--choc);color:#fff}
+.field{width:100%;border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;background:var(--cream)}
+.field:focus,.note:focus{outline:2px solid var(--pink);outline-offset:1px}
+.total{display:flex;justify-content:space-between;font-weight:800;font-size:18px;color:var(--choc)}
+.total span:last-child{font-family:"Suez One";font-weight:400;color:var(--pink);font-size:24px}
+
+/* ---------- pay modal ---------- */
+.modal{position:fixed;z-index:80;inset:0;display:grid;place-items:center;padding:16px;pointer-events:none}
+.modal .card{background:#fff;border-radius:26px;max-width:420px;width:100%;padding:28px;text-align:center;transform:scale(.9);opacity:0;transition:all .35s var(--ease);box-shadow:var(--shadow)}
+.modal.show{pointer-events:auto}
+.modal.show .card{transform:none;opacity:1}
+.modal h3{font-family:"Suez One";font-weight:400;font-size:28px;color:var(--choc);margin:10px 0 6px}
+.modal p{color:var(--muted);font-size:14px}
+.modal .no{font-family:"Suez One";font-size:54px;color:var(--pink);line-height:1;margin:10px 0}
+
+/* ---------- info / footer ---------- */
+.info{margin:40px max(16px,6vw) 0;background:var(--choc);color:#fff;border-radius:32px;padding:clamp(28px,5vw,60px);display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:30px;position:relative;overflow:hidden}
+.info h2{font-family:"Suez One";font-weight:400;font-size:clamp(30px,3.6vw,48px);line-height:1.05}
+.info h2 em{color:var(--pink);font-style:normal}
+.info h4{color:#f6c7d1;font-size:13px;letter-spacing:.12em;margin-bottom:8px}
+.info p{opacity:.88;font-size:15px}
+.info .stampbg{position:absolute;width:360px;left:-80px;bottom:-110px;opacity:.07;filter:brightness(10)}
+footer{padding:30px max(16px,6vw) 40px;color:var(--muted);font-size:13px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+footer a{color:var(--muted)}
+.mock-flag{position:fixed;bottom:14px;right:14px;z-index:35;background:#fff;border:1px dashed var(--pink);color:var(--pink-d);font-size:11.5px;font-weight:700;padding:6px 10px;border-radius:10px;max-width:220px;line-height:1.35}
+
+.reveal{opacity:0;transform:translateY(40px)}
+
+@media (max-width:900px){
+  header nav{display:none}
+  .hero{grid-template-columns:1fr;padding-top:96px;text-align:center;gap:24px}
+  .hero .sub{margin-inline:auto}
+  .cta-row{justify-content:center}
+  .hero-art{width:min(86vw,420px);order:-1}
+  .story{grid-template-columns:1fr 1fr}
+  .story .tile:nth-child(3){transform:none}
+  .story .tile:nth-child(4){display:none}
+  .info{grid-template-columns:1fr}
+  .scroll-hint{display:none}
+}
+@media (max-width:520px){
+  .story{grid-template-columns:1fr}
+  .story .tile{aspect-ratio:4/3}
+  .items{grid-template-columns:1fr}
+  .cart-btn .lbl{display:none}
+  .mock-flag{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<!-- INTRO -->
+<div id="intro" aria-hidden="true">
+  <div class="ink"></div>
+  <img class="stamp" src="brand/logo-round.svg" alt="">
+  <button class="skip" onclick="endIntro(true)">דילוג ›</button>
+</div>
+
+<header id="hdr">
+  <a class="brand" href="#top" aria-label="סופלה — לראש העמוד"><img src="brand/logo-round.svg" alt=""><span>סופלה</span></a>
+  <nav><a href="#menu">תפריט</a><a href="#story">הפינוקים</a><a href="#info">שעות ומיקום</a></nav>
+  <button class="cart-btn" id="cartBtn" onclick="openCart()" aria-label="עגלה">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 7h12l-1.2 11.2a2 2 0 0 1-2 1.8H9.2a2 2 0 0 1-2-1.8z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
+    <span class="lbl">העגלה</span><span class="count" id="cartCount">0</span>
+  </button>
+</header>
+
+<main id="top">
+<section class="hero">
+  <div>
+    <span class="eyebrow"><i></i>פתוח עכשיו · איסוף תוך 10 דק׳</span>
+    <h1>
+      <span class="line"><span>מגיע לך</span></span>
+      <span class="line"><span><em>להתפנק.</em></span></span>
+    </h1>
+    <p class="sub">גלידה, וופל בלגי, קרפ צרפתי ושייקי פירות — בונים בדיוק כמו שאוהבים, משלמים ונכנסים לאסוף.</p>
+    <div class="sig">Sweet treat</div>
+    <div class="cta-row">
+      <a class="btn btn-pink" href="#menu">להזמין עכשיו <span aria-hidden="true">←</span></a>
+      <a class="btn btn-ghost" href="#info">איפה אנחנו</a>
+    </div>
+  </div>
+  <div class="hero-art" id="heroArt">
+    <svg class="ring" viewBox="0 0 400 400" aria-hidden="true">
+      <defs><path id="circ" d="M200,200 m-182,0 a182,182 0 1,1 364,0 a182,182 0 1,1 -364,0"/></defs>
+      <text><textPath href="#circ">SWEET TREAT ✕ מגיע לך להתפנק ✕ SWEET TREAT ✕ מגיע לך להתפנק ✕</textPath></text>
+    </svg>
+    <div class="photo"><img src="../img/hero.jpg" alt="גלידה של סופלה"></div>
+    <div class="drop" style="width:22px;height:22px;top:8%;right:16%"></div>
+    <div class="drop" style="width:14px;height:14px;top:18%;right:6%;background:var(--choc)"></div>
+    <div class="drop" style="width:18px;height:18px;bottom:20%;right:2%"></div>
+    <div class="badge"><b>30+</b><small>שילובים<br>שאפשר לבנות</small></div>
+  </div>
+  <div class="scroll-hint">גללו<span></span></div>
+</section>
+
+<div class="marquee" aria-hidden="true"><div class="track" id="mqTrack"></div></div>
+
+<section class="story" id="story">
+  <div class="head reveal"><h2>כל פינוק <em>נבנה</em><br>בדיוק בשבילך.</h2></div>
+  <div class="tile reveal" data-go="waffle"><img src="../img/waffle.jpg" alt=""><div class="t"><b>וופל בלגי</b><small>עד 3 רטבים · עד 5 תוספות</small></div></div>
+  <div class="tile reveal" data-go="frozen"><img src="../img/frozen-yogurt.jpg" alt=""><div class="t"><b>פרוזן יוגורט</b><small>עד 5 פירות טריים</small></div></div>
+  <div class="tile reveal" data-go="crepe"><img src="../img/crepe.jpg" alt=""><div class="t"><b>קרפ צרפתי</b><small>מגוון מילויים</small></div></div>
+</section>
+
+<section id="menu">
+  <div class="menu-head reveal"><h2>התפריט<br><em>של סופלה</em></h2><p style="color:var(--muted);max-width:36ch">בוחרים, בונים, משלמים. ההזמנה קופצת אצלנו במטבח ברגע שהתשלום עובר.</p></div>
+  <div class="tabs" id="tabs"></div>
+  <div id="cats"></div>
+</section>
+
+<section class="info" id="info">
+  <img class="stampbg" src="brand/logo-round.svg" alt="">
+  <div><h2>בואו <em>לאסוף</em><br>או שנביא אליכם.</h2></div>
+  <div><h4>שעות פתיחה</h4><p>א׳–ה׳ · 12:00–23:00<br>ו׳ · 10:00–15:00<br>מוצ״ש · 19:00–00:00</p><p style="font-size:12px;opacity:.6;margin-top:6px">(שעות לדוגמה — ממתין לשעות האמיתיות)</p></div>
+  <div><h4>מיקום ויצירת קשר</h4><p>ביתר עילית<br>(כתובת מלאה תתעדכן)</p><p style="margin-top:8px">‎052-661-2332</p></div>
+</section>
+</main>
+
+<footer><span>© סופלה · Sweet treat</span><span><a href="#">תקנון</a> · <a href="#">מדיניות פרטיות</a> · <a href="#">נגישות</a></span></footer>
+
+<div class="mock-flag">מוקאפ v2 · רשימות התוספות כאן לדוגמה, עד שתשלח את הרשימה שלך</div>
+
+<!-- BUILDER -->
+<div class="veil" id="veil" onclick="closeAll()"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="bTitle">
+  <div class="media"><img id="bImg" alt=""><button class="x" onclick="closeAll()" aria-label="סגירה">✕</button></div>
+  <div class="body" id="bBody"></div>
+  <div class="foot">
+    <div class="stepper"><button onclick="bQty(-1)" aria-label="פחות">−</button><span id="bQtyV">1</span><button onclick="bQty(1)" aria-label="יותר">+</button></div>
+    <button class="btn btn-pink" id="bAdd" onclick="bCommit()"><span>הוספה לעגלה</span><span id="bTotal">₪0</span></button>
+  </div>
+</div>
+
+<!-- CART -->
+<aside class="drawer" id="drawer" aria-label="עגלת קניות">
+  <div class="dh"><h3>העגלה שלך</h3><button class="x" onclick="closeAll()" aria-label="סגירה" style="font-size:22px;color:var(--choc)">✕</button></div>
+  <div class="list" id="cartList"></div>
+  <div class="df" id="cartFoot">
+    <div class="seg"><button class="on" data-mode="pickup" onclick="setMode('pickup')">איסוף עצמי</button><button data-mode="delivery" onclick="setMode('delivery')">משלוח</button></div>
+    <input class="field" id="cName" placeholder="שם מלא" autocomplete="name">
+    <input class="field" id="cPhone" placeholder="טלפון" inputmode="tel" autocomplete="tel">
+    <input class="field" id="cAddr" placeholder="כתובת למשלוח" autocomplete="street-address" style="display:none">
+    <textarea class="note" id="cNote" placeholder="הערות להזמנה (לא חובה)"></textarea>
+    <div class="total"><span>סה״כ לתשלום</span><span id="cTotal">₪0</span></div>
+    <button class="btn btn-pink" style="justify-content:center" onclick="checkout()">מעבר לתשלום מאובטח 🔒</button>
+  </div>
+</aside>
+
+<div class="modal" id="payModal"><div class="card">
+  <img src="brand/logo-round.svg" alt="" style="width:84px;margin:0 auto">
+  <h3>כאן נפתח דף הסליקה</h3>
+  <p>במוקאפ לא מחייבים כלום. באתר האמיתי הלקוח עובר לדף התשלום המאובטח (אשראי / Bit / Apple Pay), ורק אחרי שהתשלום מאושר ההזמנה קופצת במסך החנות:</p>
+  <div class="no" id="payNo">#1042</div>
+  <button class="btn btn-pink" onclick="closeAll()" style="margin-top:8px">סגירה</button>
+</div></div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+/* ================= DATA ================= */
+// רשימות לדוגמה — יוחלפו ברשימות של בעל החנות
+const LISTS = {
+  fruits:["תות","בננה","מנגו","אננס","אוכמניות","קיווי","אבטיח","פטל","ענבים","תפוח"],
+  choc:["קינדר בואנו","לוטוס","אוראו","M&M","שוקולד צ׳יפס","קיט קאט","פררו רושה","מרשמלו","בונבוניירה","סוכריות צבעוניות"],
+  sauces:["שוקולד חלב","שוקולד לבן","נוטלה","קרמל מלוח","ריבת חלב","פיסטוק","לוטוס","מייפל"],
+  flavors:["וניל","שוקולד","תות","פיסטוק","עוגיות","קרמל","מנגו סורבה","לימון סורבה","ריבת חלב","קינדר"],
+  base:["מים","תפוזים","חלב","יוגורט","סויה","שקדים"]
+};
+// חוקי ההגבלה — PRD פרק "בונה המוצרים"
+const BUILDERS = {
+  frozen:{lead:"פרוזן יוגורט קרמי עם פירות טריים ותוספות.",groups:[
+    {id:"fruits",title:"פירות",list:"fruits",max:5},
+    {id:"choc",title:"תוספות שוקולד",list:"choc",max:3}]},
+  shake:{lead:"שייק פירות טרי — בוחרים בסיס ועד 5 פירות.",groups:[
+    {id:"base",title:"בסיס",list:"base",max:1,min:1,single:true},
+    {id:"fruits",title:"פירות",list:"fruits",max:5,min:1},
+    {id:"choc",title:"תוספות שוקולד",list:"choc",max:3}]},
+  crepe:{lead:"קרפ צרפתי חם, מקופל ביד.",groups:[
+    {id:"sauces",title:"רטבים",list:"sauces",max:3},
+    {id:"choc",title:"תוספות",list:"choc",max:5},
+    {id:"extra",title:"כדור גלידה / קצפת",count:true,price:8,max:3,opts:["כדור גלידה","קצפת"]}]},
+  waffle:{lead:"וופל בלגי פריך מבחוץ ורך מבפנים.",groups:[
+    {id:"sauces",title:"רטבים",list:"sauces",max:3},
+    {id:"choc",title:"תוספות",list:"choc",max:5},
+    {id:"extra",title:"כדור גלידה / קצפת",count:true,price:8,max:3,opts:["כדור גלידה","קצפת"]}]},
+  scoops:{lead:"בוחרים את הטעמים לפי מספר הכדורים.",groups:[
+    {id:"flavors",title:"טעמים",list:"flavors",maxFromSize:[1,2,3],minFromSize:[1,2,3]}]},
+  bulk:{lead:"גלידה לבית במשקל — עד 3 טעמים.",groups:[
+    {id:"flavors",title:"טעמים",list:"flavors",max:3,min:1}]}
+};
+const MENU = [
+  {id:"icecream",name:"גלידה",en:"Ice cream",img:"../img/icecream.jpg",blurb:"גלידה איטלקית במגוון טעמים, בגביע או בכוס.",items:[
+    {id:"scoops",name:"גלידה בכדורים",sizes:[["טעם אחד",15],["2 טעמים",22],["3 טעמים",30]],build:"scoops"},
+    {id:"bulk",name:"גלידה במשקל",sizes:[["חצי ק״ג",48],["1 ק״ג",85]],build:"bulk"},
+    {id:"american",name:"גלידה אמריקאית",price:16}]},
+  {id:"frozen",name:"פרוזן יוגורט",en:"Frozen yogurt",img:"../img/frozen-yogurt.jpg",blurb:"עד 5 פירות ותוספות שוקולד לבחירה.",items:[
+    {id:"frozen",name:"פרוזן יוגורט",desc:"עד 5 פירות · עד 3 תוספות שוקולד",sizes:[["M",25],["L",32]],build:"frozen"}]},
+  {id:"waffle",name:"וופל בלגי",en:"Belgian waffle",img:"../img/waffle.jpg",blurb:"עד 3 רטבים ועד 5 תוספות.",items:[
+    {id:"waffle",name:"וופל בלגי",desc:"כולל קצפת · עד 3 רטבים · עד 5 תוספות",price:35,build:"waffle"},
+    {id:"bubble",name:"וופל באבלס",desc:"עד 3 רטבים · עד 5 תוספות",price:29,build:"waffle",img:"../img/bubble-waffle.jpg"}]},
+  {id:"crepe",name:"קרפ צרפתי",en:"France crepe",img:"../img/crepe.jpg",blurb:"מגוון מילויים — עד 3 רטבים ועד 5 תוספות.",items:[
+    {id:"crepe",name:"קרפ צרפתי",desc:"עם מגוון מילויים · עד 3 רטבים · עד 5 תוספות",price:25,build:"crepe"}]},
+  {id:"souffle",name:"סופלה חם",en:"Chocolate souffle",img:"../img/chocolate.jpg",blurb:"הקינוח שנתן לנו את השם.",items:[
+    {id:"souffle",name:"סופלה שוקולד חם עם גלידה",price:30,tag:"הדגל שלנו"}]},
+  {id:"shakes",name:"שייקים",en:"Fruit & milk shakes",img:"../img/smoothie.jpg",blurb:"שייק פירות על בסיס לבחירה, או מילק שייק סמיך.",items:[
+    {id:"shake",name:"שייק פירות",desc:"בסיס מים/תפוזים/חלב/יוגורט/סויה/שקדים · עד 5 פירות",sizes:[["S",22],["M",27],["L",32]],build:"shake"},
+    {id:"milkshake",name:"מילק שייק",sizes:[["S",25],["M",30],["L",39]],img:"../img/milkshake.jpg"},
+    {id:"juice",name:"מיץ סחוט טרי",sizes:[["S",15],["M",20],["L",30]],img:"../img/juice.jpg"}]},
+  {id:"bagel",name:"בייגל / טוסט",en:"Bagel / Toast",img:"../img/bagel.jpg",blurb:"לפני הקינוח — משהו מלוח.",items:[
+    {id:"bagel",name:"בייגל / טוסט",price:28},
+    {id:"salmon",name:"בייגל סלמון",price:35,img:"../img/salmon-bagel.jpg"},
+    {id:"tuna",name:"בייגל טונה",price:30,img:"../img/tuna.jpg"},
+    {id:"salad",name:"סלט",desc:"(שם המנה לאישור)",price:33,img:"../img/salad.jpg"}]},
+  {id:"coffee",name:"קפה ושתייה",en:"Drinks",img:"../img/iced-coffee.jpg",blurb:"חם, קר ומה שבאמצע.",items:[
+    {id:"iced",name:"אייס קפה",sizes:[["S",10],["M",15],["L",20]],addons:[["תוספת פקאן",5]]},
+    {id:"espresso",name:"אספרסו",price:8},
+    {id:"americano",name:"אמריקנו",price:8},
+    {id:"latte",name:"קפה הפוך",sizes:[["קטן",10],["גדול",15]]},
+    {id:"nes",name:"נס על חלב",sizes:[["קטן",10],["גדול",15]]},
+    {id:"tea",name:"תה",sizes:[["קטן",8],["גדול",10]]},
+    {id:"choco",name:"שוקולטה",sizes:[["קטן",15],["גדול",20]]},
+    {id:"shoko",name:"שוקו",sizes:[["קטן",15],["גדול",20]]},
+    {id:"chai",name:"צ׳אי לאטה",sizes:[["קטן",15],["גדול",20]]},
+    {id:"chocc",name:"שוקוצ׳ינו",sizes:[["קטן",15],["גדול",20]]},
+    {id:"sahlab",name:"סחלב",sizes:[["קטן",15],["גדול",20]]},
+    {id:"vanilla",name:"פרנץ׳ וניל",sizes:[["קטן",15],["גדול",20]]},
+    {id:"water",name:"מים / סודה",price:7},
+    {id:"can",name:"פחית",price:8},
+    {id:"bottle",name:"בקבוק",price:10}]}
+];
+const DELIVERY_FEE = 25;
+const ITEM = {}; MENU.forEach(c=>c.items.forEach(i=>ITEM[i.id]={...i,cat:c}));
+
+/* ================= helpers ================= */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
+const fmt=n=>"₪"+n;
+function toast(t){const el=$("#toast");el.textContent=t;el.classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove("show"),1900)}
+const store={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}};
+
+/* ================= render menu ================= */
+function priceLabel(i){
+  if(i.sizes){const ps=i.sizes.map(s=>s[1]);return `<small>מ-</small>${fmt(Math.min(...ps))}`}
+  return fmt(i.price);
+}
+function renderMenu(){
+  $("#tabs").innerHTML=MENU.map((c,k)=>`<button class="tab${k?"":" on"}" data-cat="${c.id}">${c.name}</button>`).join("");
+  $("#cats").innerHTML=MENU.map(c=>`
+    <div class="cat" id="cat-${c.id}">
+      <div class="cat-hero"><img src="${c.img}" alt="" loading="lazy"><div class="ct"><div class="script">${c.en}</div><h3>${c.name}</h3><p>${c.blurb}</p></div></div>
+      <div class="items">${c.items.map(itemCard).join("")}</div>
+    </div>`).join("");
+  document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>document.getElementById("cat-"+t.dataset.cat).scrollIntoView({behavior:"smooth"}));
+}
+function itemCard(i){
+  const sizeChips=i.sizes&&!i.build?`<div class="chips" data-sizes="${i.id}">${i.sizes.map((s,k)=>`<button class="chip${k?"":" on"}" data-k="${k}">${s[0]} · ${s[1]}</button>`).join("")}</div>`:"";
+  const addonChips=i.addons?`<div class="chips" data-addons="${i.id}">${i.addons.map((a,k)=>`<button class="chip" data-k="${k}">+ ${a[0]} ${fmt(a[1])}</button>`).join("")}</div>`:"";
+  return `<div class="item">
+    <div class="top"><div><h4>${i.name}</h4>${i.desc?`<div class="desc">${i.desc}</div>`:""}</div><div class="price">${priceLabel(i)}</div></div>
+    ${i.tag?`<span class="tag" style="align-self:start">${i.tag}</span>`:""}
+    ${sizeChips}${addonChips}
+    <div class="act">${i.build?`<span class="desc">${i.sizes?i.sizes.map(s=>s[0]).join(" · "):""}</span><button class="add build" onclick="openBuilder('${i.id}')">בנה לי ✦</button>`:`<span></span><button class="add" onclick="quickAdd('${i.id}',this)">+ הוספה</button>`}</div>
+  </div>`;
+}
+document.addEventListener("click",e=>{
+  const chip=e.target.closest(".chip");if(!chip)return;
+  const box=chip.parentElement;
+  if(box.dataset.sizes){box.querySelectorAll(".chip").forEach(c=>c.classList.remove("on"));chip.classList.add("on")}
+  else chip.classList.toggle("on");
+});
+
+/* ================= cart ================= */
+let cart=store.get("sfl_cart_v2",[]);
+let mode="pickup";
+function saveCart(){store.set("sfl_cart_v2",cart);renderCart()}
+function addLine(line){cart.push(line);saveCart();const b=$("#cartBtn");b.classList.remove("bump");void b.offsetWidth;b.classList.add("bump");toast("נוסף לעגלה ✓ "+line.name)}
+function quickAdd(id,btn){
+  const i=ITEM[id];let price=i.price||0,size=null,opts=[];
+  const card=btn.closest(".item");
+  if(i.sizes){const on=card.querySelector("[data-sizes] .chip.on");const k=+(on?.dataset.k||0);size=i.sizes[k][0];price=i.sizes[k][1]}
+  if(i.addons){card.querySelectorAll("[data-addons] .chip.on").forEach(c=>{const a=i.addons[+c.dataset.k];opts.push(a[0]);price+=a[1]})}
+  addLine({id,name:i.name,size,opts:opts.length?[{t:"תוספות",v:opts}]:[],unit:price,qty:1});
+}
+function lineText(l){return [l.size?("גודל: "+l.size):null,...l.opts.map(o=>o.t+": "+o.v.join(", ")),l.note?("הערה: "+l.note):null].filter(Boolean).map(esc).join("<br>")}
+function cartTotal(){const s=cart.reduce((a,l)=>a+l.unit*l.qty,0);return s+(mode==="delivery"&&cart.length?DELIVERY_FEE:0)}
+function renderCart(){
+  $("#cartCount").textContent=cart.reduce((a,l)=>a+l.qty,0);
+  $("#cartList").innerHTML=cart.length?cart.map((l,k)=>`
+    <div class="cline"><div class="lt"><b>${esc(l.name)}</b><b style="color:var(--pink)">${fmt(l.unit*l.qty)}</b></div>
+      <div class="opts-txt">${lineText(l)}</div>
+      <div class="lb"><div class="stepper"><button onclick="lq(${k},-1)">−</button><span>${l.qty}</span><button onclick="lq(${k},1)">+</button></div><button class="rm" onclick="lq(${k},-999)">הסרה</button></div>
+    </div>`).join("")+(mode==="delivery"?`<div class="cline"><div class="lt"><b>משלוח</b><b>${fmt(DELIVERY_FEE)}</b></div></div>`:"")
+    :`<div class="empty"><img src="brand/logo-round.svg" alt=""><b style="color:var(--choc)">העגלה עוד ריקה</b><p>מגיע לך להתפנק — בוא נבנה משהו.</p></div>`;
+  $("#cartFoot").style.display=cart.length?"grid":"none";
+  $("#cTotal").textContent=fmt(cartTotal());
+}
+function lq(k,d){cart[k].qty+=d;if(cart[k].qty<1)cart.splice(k,1);saveCart()}
+function setMode(m){mode=m;document.querySelectorAll(".seg button").forEach(b=>b.classList.toggle("on",b.dataset.mode===m));$("#cAddr").style.display=m==="delivery"?"block":"none";renderCart()}
+function openCart(){renderCart();$("#drawer").classList.add("show");$("#veil").classList.add("show")}
+function checkout(){
+  const n=$("#cName").value.trim(),p=$("#cPhone").value.replace(/\D/g,"");
+  if(!n){toast("צריך שם להזמנה");$("#cName").focus();return}
+  if(p.length<9){toast("צריך מספר טלפון תקין");$("#cPhone").focus();return}
+  if(mode==="delivery"&&!$("#cAddr").value.trim()){toast("צריך כתובת למשלוח");$("#cAddr").focus();return}
+  $("#payNo").textContent="#"+(1000+Math.floor(Math.random()*900));
+  $("#drawer").classList.remove("show");$("#payModal").classList.add("show");
+}
+
+/* ================= builder ================= */
+let B=null; // {item, sizeK, sel:{gid:[...]}, counts:{gid:{opt:n}}, qty}
+function gMax(g){return g.maxFromSize?g.maxFromSize[B.sizeK]:g.max}
+function gMin(g){return g.minFromSize?g.minFromSize[B.sizeK]:(g.min||0)}
+function gCount(g){return g.count?Object.values(B.counts[g.id]||{}).reduce((a,b)=>a+b,0):(B.sel[g.id]||[]).length}
+function openBuilder(id){
+  const it=ITEM[id],def=BUILDERS[it.build];
+  B={it,def,sizeK:0,sel:{},counts:{},qty:1,note:""};
+  $("#bImg").src=it.img||it.cat.img;
+  renderBuilder();
+  $("#sheet").classList.add("show");$("#veil").classList.add("show");
+  $("#bBody").scrollTop=0;
+}
+function renderBuilder(){
+  const {it,def}=B;
+  let h=`<h3 id="bTitle">${it.name}</h3><p class="lead">${def.lead}</p>`;
+  if(it.sizes){
+    h+=`<div class="group"><div class="gh"><b>${it.build==="scoops"?"כמה כדורים?":"גודל"}</b></div><div class="opts">${it.sizes.map((s,k)=>`<button class="opt${k===B.sizeK?" on":""}" onclick="bSize(${k})">${s[0]} <span class="p">${fmt(s[1])}</span></button>`).join("")}</div></div>`;
+  }
+  def.groups.forEach(g=>{
+    const max=gMax(g),min=gMin(g),n=gCount(g),full=n>=max;
+    const rule=g.single?"בחירה אחת · חובה":(min?`בחרו ${min===max?max:("לפחות "+min+", עד "+max)}`:`עד ${max} לבחירה`)+(g.count?` · ${fmt(g.price)} ליחידה`:"");
+    h+=`<div class="group" data-g="${g.id}"><div class="gh"><div><b>${g.title}</b><small>${rule}</small></div>
+      ${g.single?"":`<div class="meter${full?" full":""}"><span>${n}/${max}</span><span class="bar"><i style="width:${Math.min(100,n/max*100)}%"></i></span></div>`}</div>`;
+    if(g.count){
+      h+=g.opts.map(o=>{const v=(B.counts[g.id]||{})[o]||0;return `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0"><span style="font-weight:700;color:var(--choc)">${o} <span class="p" style="color:var(--muted);font-size:12px">+${fmt(g.price)}</span></span><div class="stepper"><button onclick="bCount('${g.id}','${o}',-1)">−</button><span>${v}</span><button onclick="bCount('${g.id}','${o}',1)" ${full?"disabled style='opacity:.3'":""}>+</button></div></div>`}).join("");
+    }else{
+      const sel=B.sel[g.id]||[];
+      h+=`<div class="opts">${LISTS[g.list].map(o=>{const on=sel.includes(o);return `<button class="opt${on?" on":""}" ${!on&&full&&!g.single?"disabled":""} onclick="bPick('${g.id}',this)" data-o="${esc(o)}">${on&&!g.single?"✓ ":""}${esc(o)}</button>`}).join("")}</div>`;
+    }
+    h+=`</div>`;
+  });
+  h+=`<div class="group"><div class="gh"><b>הערה למטבח</b></div><textarea class="note" placeholder="למשל: בלי קצפת, רוטב בצד" oninput="B.note=this.value">${esc(B.note)}</textarea></div><div class="missing" id="bMissing"></div>`;
+  const st=$("#bBody").scrollTop;$("#bBody").innerHTML=h;$("#bBody").scrollTop=st;
+  bUpdateFoot();
+}
+function bSize(k){
+  B.sizeK=k;
+  B.def.groups.forEach(g=>{if(g.maxFromSize&&B.sel[g.id])B.sel[g.id]=B.sel[g.id].slice(0,gMax(g))});
+  renderBuilder();
+}
+function bPick(gid,btn){
+  const g=B.def.groups.find(x=>x.id===gid),o=btn.dataset.o,sel=B.sel[gid]||(B.sel[gid]=[]);
+  const i=sel.indexOf(o);
+  if(g.single){B.sel[gid]=[o]}
+  else if(i>=0)sel.splice(i,1);
+  else{if(sel.length>=gMax(g)){toast(`אפשר עד ${gMax(g)} ב${g.title}`);return}sel.push(o);if(sel.length===gMax(g))toast(`מעולה — בחרת ${gMax(g)}/${gMax(g)} ${g.title}`)}
+  renderBuilder();
+  const nb=document.querySelector(`[data-g="${gid}"] [data-o="${CSS.escape(o)}"]`);nb&&nb.classList.add("pop");
+}
+function bCount(gid,o,d){
+  const g=B.def.groups.find(x=>x.id===gid),c=B.counts[gid]||(B.counts[gid]={});
+  if(d>0&&gCount(g)>=g.max){toast(`עד ${g.max} יחידות`);return}
+  c[o]=Math.max(0,(c[o]||0)+d);renderBuilder();
+}
+function bQty(d){B.qty=Math.max(1,B.qty+d);bUpdateFoot()}
+function bUnit(){
+  let p=B.it.sizes?B.it.sizes[B.sizeK][1]:B.it.price;
+  B.def.groups.forEach(g=>{if(g.count)p+=gCount(g)*g.price});
+  return p;
+}
+function bMissing(){
+  for(const g of B.def.groups){const min=gMin(g),n=gCount(g);if(n<min)return g.single?`בחרו ${g.title}`:`חסר: ${min-n} ${g.title}`}
+  return "";
+}
+function bUpdateFoot(){
+  $("#bQtyV").textContent=B.qty;$("#bTotal").textContent=fmt(bUnit()*B.qty);
+  const m=bMissing();const el=$("#bMissing");if(el)el.textContent=m;
+  $("#bAdd").style.opacity=m?.55:1;
+}
+function bCommit(){
+  const m=bMissing();if(m){toast(m);return}
+  const opts=[];
+  B.def.groups.forEach(g=>{
+    if(g.count){const v=Object.entries(B.counts[g.id]||{}).filter(([,n])=>n).map(([o,n])=>n>1?`${o} ×${n}`:o);if(v.length)opts.push({t:g.title,v})}
+    else if((B.sel[g.id]||[]).length)opts.push({t:g.title,v:B.sel[g.id]});
+  });
+  addLine({id:B.it.id,name:B.it.name,size:B.it.sizes?B.it.sizes[B.sizeK][0]:null,opts,note:B.note.trim(),unit:bUnit(),qty:B.qty});
+  closeAll();
+}
+function closeAll(){["#sheet","#drawer","#veil","#payModal"].forEach(s=>$(s).classList.remove("show"))}
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeAll()});
+
+/* ================= cinematic ================= */
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const hasG=typeof gsap!=="undefined";
+let introDone=false;
+function endIntro(skip){
+  if(introDone)return;introDone=true;
+  const el=$("#intro");
+  if(!hasG||skip||reduce){el.remove();heroIn();return}
+  gsap.to(el,{yPercent:-100,duration:.9,ease:"power4.inOut",onComplete:()=>el.remove()});
+  heroIn(.25);
+}
+function intro(){
+  if(!hasG||reduce||store.get("sfl_intro_seen",0)>Date.now()-6*3600e3){endIntro(true);return}
+  store.set("sfl_intro_seen",Date.now());
+  const tl=gsap.timeline({onComplete:()=>endIntro(false)});
+  tl.set("#intro .stamp",{opacity:1,scale:3.2,rotate:-28,filter:"blur(10px)"})
+    .to("#intro .stamp",{scale:1,rotate:-8,filter:"blur(0px)",duration:.55,ease:"power4.in"})
+    .to("#intro .ink",{opacity:1,scale:1.15,duration:.5,ease:"power2.out"},"<.5")
+    .to("#intro .stamp",{x:-6,yoyo:true,repeat:3,duration:.05},"<")
+    .to("#intro .stamp",{rotate:0,duration:.6,ease:"elastic.out(1,.5)"})
+    .to({}, {duration:.35});
+}
+function heroIn(d=0){
+  if(!hasG||reduce)return;
+  gsap.from(".hero h1 .line > span",{yPercent:110,duration:1.1,ease:"power4.out",stagger:.12,delay:d});
+  gsap.from(".hero .eyebrow, .hero .sub, .hero .sig, .cta-row",{y:24,opacity:0,duration:.8,stagger:.08,delay:d+.35,ease:"power3.out"});
+  gsap.from(".hero-art .photo",{scale:.6,opacity:0,duration:1.2,delay:d+.1,ease:"expo.out"});
+  gsap.from(".hero-art .ring",{opacity:0,duration:1.4,delay:d+.4});
+  gsap.from(".hero-art .badge",{y:30,opacity:0,duration:.8,delay:d+.8,ease:"back.out(1.6)"});
+  gsap.from(".drop",{y:-80,opacity:0,duration:1,stagger:.12,delay:d+.6,ease:"bounce.out"});
+}
+function scrollFx(){
+  if(!hasG||reduce||typeof ScrollTrigger==="undefined"){document.querySelectorAll(".reveal").forEach(e=>{e.style.opacity=1;e.style.transform="none"});return}
+  gsap.registerPlugin(ScrollTrigger);
+  gsap.utils.toArray(".reveal").forEach(el=>gsap.to(el,{opacity:1,y:0,duration:1,ease:"power3.out",scrollTrigger:{trigger:el,start:"top 88%"}}));
+  gsap.to(".hero-art .photo img",{scale:1,yPercent:8,ease:"none",scrollTrigger:{trigger:".hero",start:"top top",end:"bottom top",scrub:true}});
+  gsap.to(".hero-art",{yPercent:-12,ease:"none",scrollTrigger:{trigger:".hero",start:"top top",end:"bottom top",scrub:true}});
+  gsap.utils.toArray(".tile img").forEach(img=>gsap.to(img,{scale:1,ease:"none",scrollTrigger:{trigger:img,start:"top bottom",end:"bottom top",scrub:true}}));
+  gsap.utils.toArray(".cat-hero img").forEach(img=>gsap.fromTo(img,{yPercent:-8},{yPercent:8,ease:"none",scrollTrigger:{trigger:img.parentElement,start:"top bottom",end:"bottom top",scrub:true}}));
+  gsap.utils.toArray(".cat").forEach(cat=>{
+    gsap.from(cat.querySelectorAll(".item"),{y:40,opacity:0,duration:.7,stagger:.06,ease:"power3.out",scrollTrigger:{trigger:cat.querySelector(".items"),start:"top 90%"}});
+    ScrollTrigger.create({trigger:cat,start:"top 140px",end:"bottom 140px",onToggle:s=>{if(s.isActive){const id=cat.id.slice(4);document.querySelectorAll(".tab").forEach(t=>{const on=t.dataset.cat===id;t.classList.toggle("on",on);if(on)t.scrollIntoView({inline:"center",block:"nearest",behavior:"smooth"})})}}});
+  });
+}
+
+/* ================= boot ================= */
+renderMenu();renderCart();
+$("#mqTrack").innerHTML=Array(2).fill(["גלידה","וופל בלגי","קרפ צרפתי","פרוזן יוגורט","שייק פירות","סופלה חם","מגיע לך להתפנק"].map(t=>`<span>${t}</span>`).join("")).join("");
+document.querySelectorAll(".tile").forEach(t=>t.onclick=()=>openBuilder(t.dataset.go));
+addEventListener("scroll",()=>$("#hdr").classList.toggle("solid",scrollY>30),{passive:true});
+intro();scrollFx();
+</script>
+</body>
+</html>
