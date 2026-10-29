@@ -319,7 +319,7 @@ footer a{color:var(--muted)}
 <main id="top">
 <section class="hero">
   <div class="hero-copy">
-    <span class="eyebrow" id="openBadge"><i></i><span id="openTxt">פתוח עכשיו</span><span class="sep">·</span><span>איסוף או משלוח · מוכן תוך עד 40 דק׳</span></span>
+    <span class="eyebrow" id="openBadge"><i></i><span id="openTxt">פתוח עכשיו</span><span class="sep">·</span><span>איסוף עד 40 דק׳ · משלוח עד שעה וחצי</span></span>
     <h1>
       <span class="line"><span class="split">מגיע לך</span></span>
       <span class="line"><span><em class="split">להתפנק.</em></span></span>
@@ -365,7 +365,7 @@ footer a{color:var(--muted)}
 <section class="info" id="info">
   <img class="stampbg" src="brand/logo-round.svg" alt="">
   <div><h2>בואו <em>לאסוף</em><br>או שנביא אליכם.</h2></div>
-  <div><h4>שעות פתיחה</h4><p>כל יום · 11:00–23:00</p><p style="margin-top:6px">מוכן תוך עד 40 דק׳ — איסוף או משלוח</p></div>
+  <div><h4>שעות פתיחה</h4><p>כל יום · 11:00–23:00</p><p style="margin-top:6px">איסוף — מוכן תוך עד 40 דק׳<br>משלוח — אצלך עד שעה וחצי</p></div>
   <div><h4>מיקום ויצירת קשר</h4><p>ביתר עילית<br>(כתובת מלאה תתעדכן)</p><p style="margin-top:8px">‎052-661-2332</p></div>
 </section>
 </main>
@@ -591,7 +591,7 @@ function renderCart(){
 }
 function lq(k,d){cart[k].qty+=d;if(cart[k].qty<1)cart.splice(k,1);saveCart()}
 function setMode(m){mode=m;document.querySelectorAll(".seg button").forEach(b=>b.classList.toggle("on",b.dataset.mode===m));$("#cAddr").style.display=m==="delivery"?"block":"none";
-  $("#modeNote").textContent=m==="delivery"?"משלוח עד הבית · ההזמנה מוכנה תוך עד 40 דק׳ ויוצאת אליך":"איסוף מהחנות · מוכן תוך עד 40 דק׳, נתקשר כשמוכן";renderCart()}
+  $("#modeNote").textContent=m==="delivery"?"משלוח עד הבית · אצלך עד שעה וחצי":"איסוף מהחנות · מוכן תוך עד 40 דק׳, נתקשר כשמוכן";renderCart()}
 /* שעות פתיחה — שעון ישראל */
 const HOURS={open:11*60,close:23*60};
 function israelMinutes(){const p=new Intl.DateTimeFormat("en-GB",{timeZone:"Asia/Jerusalem",hour:"2-digit",minute:"2-digit",hour12:false}).formatToParts(new Date());const g=t=>+p.find(x=>x.type===t).value;return (g("hour")%24)*60+g("minute")}
